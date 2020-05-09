@@ -63,7 +63,7 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
         // Test for populating list data
         ArrayList<String> names = new ArrayList<>();
         names.add("Ryan McLarty");
-        names.add("Chiara Giammattteo");
+        names.add("Chiara Giammatteo");
 
         ArrayList<Boolean> attended = new ArrayList<>();
         attended.add(false);

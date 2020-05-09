@@ -48,7 +48,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         Boolean emailed = emailedData.get(position);
         holder.rowMemberName.setText(name);
         holder.attended = attended;
+        holder.attendedCheckBox.setChecked(attended);
         holder.emailed = emailed;
+        holder.emailedCheckBox.setChecked(emailed);
     }
 
     // total number of rows
