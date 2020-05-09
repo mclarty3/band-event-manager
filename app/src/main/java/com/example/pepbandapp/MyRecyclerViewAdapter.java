@@ -1,6 +1,7 @@
 package com.example.pepbandapp;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,9 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
@@ -47,20 +50,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     public void onBindViewHolder(ViewHolder holder, int position) {
         String name = memberData.get(position).get_name();
         Boolean attended, emailed;
-        if (eventData.GetMemberAttendedEmailed(memberData.get(position)) != null) {
-            attended = eventData.GetMemberAttendedEmailed(memberData.get(position)).getKey();
-            emailed = eventData.GetMemberAttendedEmailed(memberData.get(position)).getValue();
-        }
-        else
-        {
-            attended = false;
-            emailed = false;
-        }
+        attended = eventData.memberAttendance.get(position).attended;
+        emailed = eventData.memberAttendance.get(position).emailed;
         holder.rowMemberName.setText(name);
         holder.attended = attended;
         holder.attendedCheckBox.setChecked(attended);
         holder.emailed = emailed;
         holder.emailedCheckBox.setChecked(emailed);
+        holder.member = memberData.get(position);
     }
 
     // total number of rows
@@ -72,6 +69,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        Member member;
         TextView rowMemberName;
         CheckBox attendedCheckBox;
         CheckBox emailedCheckBox;
@@ -82,7 +80,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         ViewHolder(View itemView) {
             super(itemView);
             final ViewHolder thisHolder = this;
-            Member thisMember;
             rowMemberName = itemView.findViewById(R.id.attendance_member_name);
             attendedCheckBox = itemView.findViewById(R.id.attendedCheckBox);
             emailedCheckBox = itemView.findViewById(R.id.emailedCheckBox);
@@ -97,7 +94,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                 }
             });
 
-            attendedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            emailedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     UpdateAttendedEmailed(thisHolder);
@@ -113,8 +110,15 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     public void UpdateAttendedEmailed(ViewHolder listItem)
     {
+        Log.d("tag", "Updating checkbox");
         listItem.attended = listItem.attendedCheckBox.isChecked();
         listItem.emailed = listItem.emailedCheckBox.isChecked();
+        /*Map.Entry<Boolean, Boolean> entry = eventData.GetMemberAttendedEmailed(listItem.member);
+        if (entry != null)
+        {
+            eventData.SetMemberAttendedEmailed(listItem.member, listItem.attended, listItem.emailed);
+        }*/
+        eventData.SetEventMemberAttendance(listItem.member, listItem.attended, listItem.emailed);
     }
 
     // convenience method for getting data at click position

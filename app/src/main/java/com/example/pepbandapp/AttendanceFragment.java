@@ -3,6 +3,7 @@ package com.example.pepbandapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -17,13 +18,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class AttendanceFragment extends AppCompatActivity implements MyRecyclerViewAdapter.ItemClickListener {
+public class AttendanceFragment extends AppCompatActivity {
     TextView attendanceNameTextView, attendanceDateTextView;
     ImageButton previousEventButton, nextEventButton;
     EditText eventNameEditText, eventDateEditText;
     EventsHandler dbHandler;
-    ArrayList<Event> eventList;
-    ArrayList<Member> memberList;
+    ArrayList<Event> eventList = new ArrayList<>();
+    ArrayList<Member> memberList = new ArrayList<>();
     Event currentlyDisplayedEvent;
 
     MyRecyclerViewAdapter adapter;
@@ -46,14 +47,11 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
         eventList = i.getParcelableArrayListExtra("eventList");
         memberList = i.getParcelableArrayListExtra("memberList");
 
-        //memberList.add(new Member("Ryan McLarty", "2021", "Trumpet", "test"));
-        //memberList.add(new Member("Chiara Giammatteo", "2021", "Trumpet", "test"));
-
         // Set up attendance list
         final RecyclerView recyclerView = findViewById(R.id.attendance_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MyRecyclerViewAdapter(this, memberList, currentlyDisplayedEvent);
-        adapter.setClickListener(this);
+        //adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
         SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
@@ -62,9 +60,10 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
             @Override
             public void onClick(View v)
             {
-                previousEvent();
-                SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
-                recyclerView.setAdapter(new MyRecyclerViewAdapter(context, memberList, currentlyDisplayedEvent));
+                if (previousEvent()) {
+                    SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
+                    recyclerView.setAdapter(new MyRecyclerViewAdapter(context, memberList, currentlyDisplayedEvent));
+                }
             }
         });
 
@@ -72,9 +71,10 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
             @Override
             public void onClick(View v)
             {
-                nextEvent();
-                SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
-                recyclerView.setAdapter(new MyRecyclerViewAdapter(context, memberList, currentlyDisplayedEvent));
+                if (nextEvent()) {
+                    SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
+                    recyclerView.setAdapter(new MyRecyclerViewAdapter(context, memberList, currentlyDisplayedEvent));
+                }
             }
         });
     }
@@ -99,40 +99,39 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
 
     }
 
-    public void previousEvent()
+    public Boolean previousEvent()
     {
         if (eventList.get(0).get_name().equals(currentlyDisplayedEvent.get_name()))
         {
-            return;
+            return false;
         }
         for (int i = 0; i < eventList.size(); i++)
         {
             if (eventList.get(i).get_name().equals(currentlyDisplayedEvent.get_name()))
             {
+                eventList.get(i).UpdateEvent(currentlyDisplayedEvent);
                 currentlyDisplayedEvent = eventList.get(i - 1);
                 break;
             }
         }
+        return true;
     }
 
-    public void nextEvent()
+    public Boolean nextEvent()
     {
         if (eventList.get(eventList.size() - 1).get_name().equals(currentlyDisplayedEvent.get_name()))
         {
-            return;
+            return false;
         }
         for (int i = 0; i < eventList.size(); i++)
         {
             if (eventList.get(i).get_name().equals(currentlyDisplayedEvent.get_name()))
             {
+                eventList.get(i).UpdateEvent(currentlyDisplayedEvent);
                 currentlyDisplayedEvent = eventList.get(i + 1);
                 break;
             }
         }
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-
+        return true;
     }
 }

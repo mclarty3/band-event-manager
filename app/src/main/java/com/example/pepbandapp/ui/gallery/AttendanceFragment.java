@@ -1,22 +1,29 @@
 package com.example.pepbandapp.ui.gallery;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.SyncStateContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pepbandapp.Event;
 import com.example.pepbandapp.MainActivity;
 import com.example.pepbandapp.R;
+
+import java.util.List;
 
 public class AttendanceFragment extends Fragment {
 
@@ -37,9 +44,10 @@ public class AttendanceFragment extends Fragment {
         Intent intent = new Intent(getActivity(), com.example.pepbandapp.AttendanceFragment.class);
         MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
-            intent.putExtra("currentlyDisplayedEvent", activity.eventList.get(1));
-            intent.putExtra("eventList", activity.eventList);
-            intent.putExtra("memberList", activity.memberList);
+            intent.putExtra("currentlyDisplayedEvent", activity.eventList.get(0));
+            //intent.putExtra("count", activity.eventList.size());
+            intent.putParcelableArrayListExtra("eventList", activity.eventList);
+            intent.putParcelableArrayListExtra("memberList", activity.memberList);
         }
         getActivity().startActivity(intent);
 

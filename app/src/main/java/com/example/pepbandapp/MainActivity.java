@@ -1,6 +1,7 @@
 package com.example.pepbandapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 
@@ -19,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,16 +55,23 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        // This is stupid jesus wtf Java
-        Calendar cal = Calendar.getInstance();
+        memberList.add(new Member("Ryan McLarty", "2021", "Trumpet", "testR"));
+        memberList.add(new Member("Chiara Giammatteo", "2021", "Trumpet", "testC"));
+
+        Calendar cal = Calendar.getInstance(); // This is now the only way to do M/D/Y in Java!
         cal.set(2020, 1, 1);
         eventList.add(new Event("Test", "Test", "Test", cal.getTime(), memberList));
         cal.set(2020, 0, 23);
         eventList.add(new Event("Test2", "Test2", "Test2", cal.getTime(), memberList));
         SortEventDates();
 
-        memberList.add(new Member("Ryan McLarty", "2021", "Trumpet", "test"));
-        memberList.add(new Member("Chiara Giammatteo", "2021", "Trumpet", "test"));
+        //eventList.get(0).SetMemberAttendedEmailed(memberList.get(0), true, false);
+        eventList.get(0).SetEventMemberAttendance(memberList.get(0), true, false);
+        eventList.get(0).SetEventMemberAttendance(memberList.get(1), false, true);
+        Log.d("tag2", eventList.get(0).memberAttendance.get(0).member.get_name());
+        Log.d("tag2", Integer.toString(eventList.get(0).memberAttendance.get(0).attended ? 1 : 0));
+
+        //memberList.get(0).set_name(String.valueOf(eventList.get(0).eventAttendence.get(memberList.get(0))));
     }
 
     @Override

@@ -45,8 +45,10 @@ public class EditEvents extends AppCompatActivity {
     //Add a product to the database
     public void addButtonClicked(View view){
         // dbHandler.add needs an object parameter.
+        ArrayList<Member> test = new ArrayList<>();
+        test.add(new Member("Test", "tetst", "temst", "Tset"));
         Event event =
-                new Event(eventNameEditText.getText().toString(), eventInfoEditText.getText().toString(), eventLocationEditText.getText().toString(), new Date(), new ArrayList<Member>());
+                new Event(eventNameEditText.getText().toString(), eventInfoEditText.getText().toString(), eventLocationEditText.getText().toString(), new Date(), test);
         dbHandler.addEvent(event);
         printDatabase();
     }
