@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,18 +14,19 @@ import java.util.List;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
+    public List<Member> memberData;
     public List<String> nameData;
     private List<Boolean> attendedData;
     private List<Boolean> emailedData;
+    public Event eventData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    MyRecyclerViewAdapter(Context context, List<String> names, List<Boolean> attended, List<Boolean> emailed) {
+    MyRecyclerViewAdapter(Context context, List<Member> members, Event event) {
         this.mInflater = LayoutInflater.from(context);
-        this.nameData = names;
-        this.attendedData = attended;
-        this.emailedData = emailed;
+        memberData = members;
+        eventData = event;
     }
 
     // inflates the row layout from xml when needed
@@ -43,9 +45,17 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String name = nameData.get(position);
-        Boolean attended = attendedData.get(position);
-        Boolean emailed = emailedData.get(position);
+        String name = memberData.get(position).get_name();
+        Boolean attended, emailed;
+        if (eventData.GetMemberAttendedEmailed(memberData.get(position)) != null) {
+            attended = eventData.GetMemberAttendedEmailed(memberData.get(position)).getKey();
+            emailed = eventData.GetMemberAttendedEmailed(memberData.get(position)).getValue();
+        }
+        else
+        {
+            attended = false;
+            emailed = false;
+        }
         holder.rowMemberName.setText(name);
         holder.attended = attended;
         holder.attendedCheckBox.setChecked(attended);
@@ -56,7 +66,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // total number of rows
     @Override
     public int getItemCount() {
-        return nameData.size();
+        return memberData.size();
     }
 
 
@@ -71,18 +81,40 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
         ViewHolder(View itemView) {
             super(itemView);
+            final ViewHolder thisHolder = this;
+            Member thisMember;
             rowMemberName = itemView.findViewById(R.id.attendance_member_name);
             attendedCheckBox = itemView.findViewById(R.id.attendedCheckBox);
             emailedCheckBox = itemView.findViewById(R.id.emailedCheckBox);
             attended = attendedCheckBox.isChecked();
             emailed = emailedCheckBox.isChecked();
             itemView.setOnClickListener(this);
+
+            attendedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    UpdateAttendedEmailed(thisHolder);
+                }
+            });
+
+            attendedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    UpdateAttendedEmailed(thisHolder);
+                }
+            });
         }
 
         @Override
         public void onClick(View view) {
             if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
+    }
+
+    public void UpdateAttendedEmailed(ViewHolder listItem)
+    {
+        listItem.attended = listItem.attendedCheckBox.isChecked();
+        listItem.emailed = listItem.emailedCheckBox.isChecked();
     }
 
     // convenience method for getting data at click position

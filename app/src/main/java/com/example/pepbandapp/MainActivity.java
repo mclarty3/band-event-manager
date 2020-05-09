@@ -56,10 +56,13 @@ public class MainActivity extends AppCompatActivity {
         // This is stupid jesus wtf Java
         Calendar cal = Calendar.getInstance();
         cal.set(2020, 1, 1);
-        eventList.add(new Event("Test", "Test", "Test", cal.getTime()));
+        eventList.add(new Event("Test", "Test", "Test", cal.getTime(), memberList));
         cal.set(2020, 0, 23);
-        eventList.add(new Event("Test2", "Test2", "Test2", cal.getTime()));
+        eventList.add(new Event("Test2", "Test2", "Test2", cal.getTime(), memberList));
         SortEventDates();
+
+        memberList.add(new Member("Ryan McLarty", "2021", "Trumpet", "test"));
+        memberList.add(new Member("Chiara Giammatteo", "2021", "Trumpet", "test"));
     }
 
     @Override

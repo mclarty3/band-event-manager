@@ -39,6 +39,7 @@ public class AttendanceFragment extends Fragment {
         if (activity != null) {
             intent.putExtra("currentlyDisplayedEvent", activity.eventList.get(1));
             intent.putExtra("eventList", activity.eventList);
+            intent.putExtra("memberList", activity.memberList);
         }
         getActivity().startActivity(intent);
 

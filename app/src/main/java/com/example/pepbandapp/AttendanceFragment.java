@@ -1,5 +1,6 @@
 package com.example.pepbandapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
     EditText eventNameEditText, eventDateEditText;
     EventsHandler dbHandler;
     ArrayList<Event> eventList;
+    ArrayList<Member> memberList;
     Event currentlyDisplayedEvent;
 
     MyRecyclerViewAdapter adapter;
@@ -29,6 +31,7 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
+        final Context context = this;
         setContentView(R.layout.fragment_attendance);
         attendanceNameTextView = (TextView) findViewById(R.id.att_name_textview);
         attendanceDateTextView = (TextView) findViewById(R.id.att_date_textview);
@@ -41,6 +44,19 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
         Intent i = getIntent();
         currentlyDisplayedEvent = i.getParcelableExtra("currentlyDisplayedEvent");
         eventList = i.getParcelableArrayListExtra("eventList");
+        memberList = i.getParcelableArrayListExtra("memberList");
+
+        //memberList.add(new Member("Ryan McLarty", "2021", "Trumpet", "test"));
+        //memberList.add(new Member("Chiara Giammatteo", "2021", "Trumpet", "test"));
+
+        // Set up attendance list
+        final RecyclerView recyclerView = findViewById(R.id.attendance_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MyRecyclerViewAdapter(this, memberList, currentlyDisplayedEvent);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
+
+        SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
 
         previousEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +64,7 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
             {
                 previousEvent();
                 SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
+                recyclerView.setAdapter(new MyRecyclerViewAdapter(context, memberList, currentlyDisplayedEvent));
             }
         });
 
@@ -57,30 +74,9 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
             {
                 nextEvent();
                 SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
+                recyclerView.setAdapter(new MyRecyclerViewAdapter(context, memberList, currentlyDisplayedEvent));
             }
         });
-
-        // Test for populating list data
-        ArrayList<String> names = new ArrayList<>();
-        names.add("Ryan McLarty");
-        names.add("Chiara Giammatteo");
-
-        ArrayList<Boolean> attended = new ArrayList<>();
-        attended.add(false);
-        attended.add(true);
-
-        ArrayList<Boolean> emailed = new ArrayList<>();
-        emailed.add(false);
-        emailed.add(false);
-
-        // Set up attendance list
-        RecyclerView recyclerView = findViewById(R.id.attendance_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyRecyclerViewAdapter(this, names, attended, emailed);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
-
-        SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
     }
 
     public void searchButtonClicked(View view) {

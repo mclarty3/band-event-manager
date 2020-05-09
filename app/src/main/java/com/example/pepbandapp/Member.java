@@ -1,6 +1,9 @@
 package com.example.pepbandapp;
 
-public class Member {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Member implements Parcelable {
     private String _name;
     private String _year;
     private String _instrument;
@@ -43,5 +46,36 @@ public class Member {
 
     public String get_email() {
         return _email;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(_name);
+        dest.writeString(_year);
+        dest.writeString(_instrument);
+        dest.writeString(_email);
+    }
+
+    public static final Parcelable.Creator<Member> CREATOR = new Parcelable.Creator<Member>() {
+        public Member createFromParcel(Parcel in) {
+            return new Member(in);
+        }
+
+        public Member[] newArray(int size) {
+            return new Member[size];
+        }
+    };
+
+    private Member(Parcel in)
+    {
+        _name = in.readString();
+        _year = in.readString();
+        _instrument = in.readString();
+        _email = in.readString();
     }
 }

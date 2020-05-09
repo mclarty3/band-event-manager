@@ -7,13 +7,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class EditEvents extends AppCompatActivity {
 
     EditText eventNameEditText, eventInfoEditText, eventLocationEditText, eventDateEditText;
     TextView displayEventsTextView;
     EventsHandler dbHandler;
+    List<Member> members;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,7 @@ public class EditEvents extends AppCompatActivity {
     public void addButtonClicked(View view){
         // dbHandler.add needs an object parameter.
         Event event =
-                new Event(eventNameEditText.getText().toString(), eventInfoEditText.getText().toString(), eventLocationEditText.getText().toString(), new Date());
+                new Event(eventNameEditText.getText().toString(), eventInfoEditText.getText().toString(), eventLocationEditText.getText().toString(), new Date(), new ArrayList<Member>());
         dbHandler.addEvent(event);
         printDatabase();
     }
