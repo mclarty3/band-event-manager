@@ -2,15 +2,16 @@ package com.example.pepbandapp;
 
 //import java.sql.Date;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Event {
     private String _name;
     private String _info;
     private String _location;
-    private Date _date;
+    private Calendar _date;
 
-    public Event(String name, String info, String location, Date date) {
+    public Event(String name, String info, String location, Calendar date) {
         this._name = name;
         this._info = info;
         this._location = location;
@@ -41,11 +42,11 @@ public class Event {
         this._location = _location;
     }
 
-    public Date get_date() {
+    public Calendar get_date() {
         return _date;
     }
 
-    public void set_date(Date _date) {
+    public void set_date(Calendar _date) {
         this._date = _date;
     }
 }
