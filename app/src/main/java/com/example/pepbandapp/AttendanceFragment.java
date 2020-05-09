@@ -2,10 +2,7 @@ package com.example.pepbandapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -50,7 +47,7 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
             public void onClick(View v)
             {
                 previousEvent();
-                SetEventDateString(attendanceDateTextView, currentlyDisplayedEvent.get_date());
+                SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
             }
         });
 
@@ -59,7 +56,7 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
             public void onClick(View v)
             {
                 nextEvent();
-                SetEventDateString(attendanceDateTextView, currentlyDisplayedEvent.get_date());
+                SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
             }
         });
 
@@ -83,7 +80,7 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
-        SetEventDateString(attendanceDateTextView, currentlyDisplayedEvent.get_date());
+        SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
     }
 
     public void searchButtonClicked(View view) {
@@ -97,39 +94,43 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
         attendanceDateTextView.setText(divided[1]);
     }
 
-    public void SetEventDateString(TextView eventDateText, Date date)
+    public void SetEventStrings(String name, Date date)
     {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/YYYY", Locale.US);
-        String eventString = simpleDateFormat.format(date);
-        eventDateText.setText(eventString);
+        String eventDateString = simpleDateFormat.format(date);
+        attendanceDateTextView.setText(eventDateString);
+        attendanceNameTextView.setText(name);
+
     }
 
     public void previousEvent()
     {
-        if (currentlyDisplayedEvent == eventList.get(0))
+        if (eventList.get(0).get_name().equals(currentlyDisplayedEvent.get_name()))
         {
             return;
         }
         for (int i = 0; i < eventList.size(); i++)
         {
-            if (eventList.get(i) == currentlyDisplayedEvent)
+            if (eventList.get(i).get_name().equals(currentlyDisplayedEvent.get_name()))
             {
                 currentlyDisplayedEvent = eventList.get(i - 1);
+                break;
             }
         }
     }
 
     public void nextEvent()
     {
-        if (currentlyDisplayedEvent == eventList.get(eventList.size() - 1))
+        if (eventList.get(eventList.size() - 1).get_name().equals(currentlyDisplayedEvent.get_name()))
         {
             return;
         }
         for (int i = 0; i < eventList.size(); i++)
         {
-            if (eventList.get(i) == currentlyDisplayedEvent)
+            if (eventList.get(i).get_name().equals(currentlyDisplayedEvent.get_name()))
             {
                 currentlyDisplayedEvent = eventList.get(i + 1);
+                break;
             }
         }
     }
