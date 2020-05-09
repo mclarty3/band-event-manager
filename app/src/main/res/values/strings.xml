@@ -42,4 +42,5 @@
     <string name="back_to_members">Back to Members</string>
     <string name="group_by_year">Group By Year</string>
     <string name="group_by_instrument">Group By Instrument</string>
+    <string name="attendance_member_name">member name</string>
 </resources>

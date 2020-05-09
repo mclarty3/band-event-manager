@@ -1,5 +1,6 @@
 package com.example.pepbandapp.ui.gallery;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,9 @@ public class AttendanceFragment extends Fragment {
 //                textView.setText(s);
 //            }
 //        });
+        Intent intent = new Intent(getActivity(), com.example.pepbandapp.AttendanceFragment.class);
+        getActivity().startActivity(intent);
+
         return root;
     }
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="wrap_content">
+
+<LinearLayout
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:background="@drawable/customborder">
+
+    <TextView
+        android:id="@+id/attendance_member_name"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/attendance_member_name"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="14dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Attended" />
+
+
+    <CheckBox
+        android:id="@+id/attendedCheckBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="7dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Emailed" />
+
+    <CheckBox
+        android:id="@+id/emailedCheckBox"
+        android:layout_width="9dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center" />
+
+</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
