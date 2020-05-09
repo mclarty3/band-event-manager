@@ -1,37 +1,67 @@
 package com.example.pepbandapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class AttendanceFragment extends AppCompatActivity implements MyRecyclerViewAdapter.ItemClickListener {
     TextView attendanceNameTextView, attendanceDateTextView;
+    ImageButton previousEventButton, nextEventButton;
     EditText eventNameEditText, eventDateEditText;
     EventsHandler dbHandler;
+    ArrayList<Event> eventList;
+    Event currentlyDisplayedEvent;
 
     MyRecyclerViewAdapter adapter;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstance) {
-        Log.d("tag", "test");
         super.onCreate(savedInstance);
         setContentView(R.layout.fragment_attendance);
         attendanceNameTextView = (TextView) findViewById(R.id.att_name_textview);
         attendanceDateTextView = (TextView) findViewById(R.id.att_date_textview);
+        previousEventButton = findViewById(R.id.back_button);
+        nextEventButton = findViewById(R.id.forward_button);
         eventNameEditText = (EditText) findViewById(R.id.event_name_edittext);
         eventDateEditText = (EditText) findViewById(R.id.event_date_edittext);
         dbHandler = new EventsHandler(this);
+
+        Intent i = getIntent();
+        currentlyDisplayedEvent = i.getParcelableExtra("currentlyDisplayedEvent");
+        eventList = i.getParcelableArrayListExtra("eventList");
+
+        previousEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                previousEvent();
+                SetEventDateString(attendanceDateTextView, currentlyDisplayedEvent.get_date());
+            }
+        });
+
+        nextEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                nextEvent();
+                SetEventDateString(attendanceDateTextView, currentlyDisplayedEvent.get_date());
+            }
+        });
 
         // Test for populating list data
         ArrayList<String> names = new ArrayList<>();
@@ -52,7 +82,8 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
         adapter = new MyRecyclerViewAdapter(this, names, attended, emailed);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
-        Log.d("tag", "setting adapter " + adapter.nameData.size());
+
+        SetEventDateString(attendanceDateTextView, currentlyDisplayedEvent.get_date());
     }
 
     public void searchButtonClicked(View view) {
@@ -64,6 +95,43 @@ public class AttendanceFragment extends AppCompatActivity implements MyRecyclerV
 
         attendanceNameTextView.setText(divided[0]);
         attendanceDateTextView.setText(divided[1]);
+    }
+
+    public void SetEventDateString(TextView eventDateText, Date date)
+    {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/YYYY", Locale.US);
+        String eventString = simpleDateFormat.format(date);
+        eventDateText.setText(eventString);
+    }
+
+    public void previousEvent()
+    {
+        if (currentlyDisplayedEvent == eventList.get(0))
+        {
+            return;
+        }
+        for (int i = 0; i < eventList.size(); i++)
+        {
+            if (eventList.get(i) == currentlyDisplayedEvent)
+            {
+                currentlyDisplayedEvent = eventList.get(i - 1);
+            }
+        }
+    }
+
+    public void nextEvent()
+    {
+        if (currentlyDisplayedEvent == eventList.get(eventList.size() - 1))
+        {
+            return;
+        }
+        for (int i = 0; i < eventList.size(); i++)
+        {
+            if (eventList.get(i) == currentlyDisplayedEvent)
+            {
+                currentlyDisplayedEvent = eventList.get(i + 1);
+            }
+        }
     }
 
     @Override

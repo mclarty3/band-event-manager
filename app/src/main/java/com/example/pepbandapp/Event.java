@@ -2,9 +2,12 @@ package com.example.pepbandapp;
 
 //import java.sql.Date;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
-public class Event {
+public class Event implements Parcelable {
     private String _name;
     private String _info;
     private String _location;
@@ -47,5 +50,36 @@ public class Event {
 
     public void set_date(Date _date) {
         this._date = _date;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(_name);
+        dest.writeString(_info);
+        dest.writeString(_location);
+        dest.writeLong(_date.getTime());
+    }
+
+    public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
+
+    private Event(Parcel in)
+    {
+        _name = in.readString();
+        _info = in.readString();
+        _location = in.readString();
+        _date = new Date(in.readLong());
     }
 }

@@ -35,12 +35,12 @@ public class EventsHandler extends SQLiteOpenHelper {
     }
 
     //add a new row to the database
-    public void addEvent(Events event){
+    public void addEvent(Event event){
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, event.get_name());
         values.put(COLUMN_INFO, event.get_info());
         values.put(COLUMN_LOCATION, event.get_location());
-        values.put(COLUMN_DATE, event.get_date());
+        values.put(COLUMN_DATE, event.get_date().toString());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_EVENTS, null, values);
         db.close();

@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Date;
+
 public class EditEvents extends AppCompatActivity {
 
     EditText eventNameEditText, eventInfoEditText, eventLocationEditText, eventDateEditText;
@@ -40,8 +42,8 @@ public class EditEvents extends AppCompatActivity {
     //Add a product to the database
     public void addButtonClicked(View view){
         // dbHandler.add needs an object parameter.
-        Events event =
-                new Events(eventNameEditText.getText().toString(), eventInfoEditText.getText().toString(), eventLocationEditText.getText().toString(), eventDateEditText.getText().toString());
+        Event event =
+                new Event(eventNameEditText.getText().toString(), eventInfoEditText.getText().toString(), eventLocationEditText.getText().toString(), new Date());
         dbHandler.addEvent(event);
         printDatabase();
     }

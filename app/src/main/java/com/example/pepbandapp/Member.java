@@ -1,12 +1,12 @@
 package com.example.pepbandapp;
 
-public class Members {
+public class Member {
     private String _name;
     private String _year;
     private String _instrument;
     private String _email;
 
-    public Members (String name, String year, String instrument, String email) {
+    public Member(String name, String year, String instrument, String email) {
         this._name = name;
         this._year = year;
         this._instrument = instrument;

@@ -40,8 +40,8 @@ public class EditMembers extends AppCompatActivity {
     //Add a product to the database
     public void addMemberButtonClicked(View view){
         // dbHandler.add needs an object parameter.
-        Members member =
-                new Members(memberNameEditText.getText().toString(), memberYearEditText.getText().toString(), memberInstrumentEditText.getText().toString(), memberEmailEditText.getText().toString());
+        Member member =
+                new Member(memberNameEditText.getText().toString(), memberYearEditText.getText().toString(), memberInstrumentEditText.getText().toString(), memberEmailEditText.getText().toString());
         dbHandler.addMember(member);
         printDatabase();
     }

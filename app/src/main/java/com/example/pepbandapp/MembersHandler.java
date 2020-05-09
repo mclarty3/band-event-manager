@@ -34,7 +34,7 @@ public class MembersHandler extends SQLiteOpenHelper {
     }
 
     //add a new row to the database
-    public void addMember(Members member){
+    public void addMember(Member member){
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, member.get_name());
         values.put(COLUMN_YEAR, member.get_year());

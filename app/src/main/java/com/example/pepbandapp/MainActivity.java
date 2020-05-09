@@ -16,9 +16,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+
+    public ArrayList<Event> eventList = new ArrayList<>();
+    public ArrayList<Member> memberList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +52,14 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        // This is stupid jesus wtf Java
+        Calendar cal = Calendar.getInstance();
+        cal.set(2020, 1, 1);
+        eventList.add(new Event("Test", "Test", "Test", cal.getTime()));
+        cal.set(2020, 0, 23);
+        eventList.add(new Event("Test2", "Test2", "Test2", cal.getTime()));
+        SortEventDates();
     }
 
     @Override
@@ -59,5 +74,32 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public Member GetMember(String name)
+    {
+        for (Member member: memberList)
+        {
+            if (member.get_name() == name)
+            {
+                return member;
+            }
+        }
+        return null;
+    }
+
+    private void SortEventDates()
+    {
+        for (int i = 0; i < eventList.size(); i++)
+        {
+            int j = i;
+            while (j > 0 && eventList.get(j-1).get_date().after(eventList.get(j).get_date()))
+            {
+                Event temp = eventList.get(j-1);
+                eventList.set(j-1, eventList.get(j));
+                eventList.set(j, temp);
+                j--;
+            }
+        }
     }
 }
