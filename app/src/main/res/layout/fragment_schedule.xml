@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.ScheduleFragment">
+    tools:context=".ScheduleFragment">
 
     <LinearLayout
         android:id="@+id/column_title_layout"
@@ -86,8 +86,8 @@
         android:layout_marginTop="17dp"
         android:layout_marginEnd="52dp"
         android:layout_marginBottom="72dp"
-        android:onClick="readInData"
         android:text="@string/read_in"
+        android:onClick="readInData"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/schedule_textview" />
