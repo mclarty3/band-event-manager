@@ -1,10 +1,19 @@
 package com.example.pepbandapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScheduleFragment extends AppCompatActivity{
 
@@ -31,5 +40,36 @@ public class ScheduleFragment extends AppCompatActivity{
     public void printDatabase(){
         String dbString = dbHandler.databaseToString();
         scheduleTextView.setText(dbString);
+    }
+
+    public void readInData() {
+        InputStream is = getResources().openRawResource(R.raw.events_data);
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(is, Charset.forName("UTF-8"))
+        );
+
+        String line = "";
+        while (true) {
+            try {
+                //split by ","
+                String[] tokens = line.split(",");
+
+                //read the data
+                Event event = null;
+                event.set_name(tokens[0]);
+                event.set_info(tokens[1]);
+                event.set_location(tokens[2]);
+                event.set_date(tokens[3]); //need to convert string to date somehow
+                dbHandler.addEvent(event);
+
+                Log.d("ScheduleActivity", "Just created: " + event);
+
+                if (!((line = reader.readLine()) != null)) break;
+            } catch (IOException e) {
+                Log.wtf("ScheduleActivity", "Error reading data file on line " + line, e);
+                e.printStackTrace();
+            }
+
+        }
     }
 }

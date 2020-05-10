@@ -86,6 +86,7 @@
         android:layout_marginTop="17dp"
         android:layout_marginEnd="52dp"
         android:layout_marginBottom="72dp"
+        android:onClick="readInData"
         android:text="@string/read_in"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

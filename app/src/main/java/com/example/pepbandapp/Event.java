@@ -51,6 +51,7 @@ public class Event implements Parcelable {
         this.eventAttendence = attendance;
     }
 
+
     public String get_name() {
         return _name;
     }
@@ -213,5 +214,17 @@ public class Event implements Parcelable {
             memberAttendance.add(MemberAttendanceRow.CREATOR.createFromParcel(in));
         }
         //_name = eventAttendence.get(mem).getValue().toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "_name='" + _name + '\'' +
+                ", _info='" + _info + '\'' +
+                ", _location='" + _location + '\'' +
+                ", _date=" + _date +
+                ", eventAttendence=" + eventAttendence +
+                ", memberAttendance=" + memberAttendance +
+                '}';
     }
 }
