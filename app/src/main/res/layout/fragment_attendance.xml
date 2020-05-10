@@ -11,7 +11,7 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="410dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/search_linearlayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +78,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/attendance_list"
             android:layout_width="match_parent"
-            android:layout_height="421dp" />
+            android:layout_height="411dp" />
 
         <LinearLayout
             android:id="@+id/search_linearlayout"
@@ -108,8 +108,8 @@
 
         <LinearLayout
             android:id="@+id/buttons_linearlayout"
-            android:layout_width="396dp"
-            android:layout_height="36dp"
+            android:layout_width="match_parent"
+            android:layout_height="59dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="0dp"
             android:orientation="horizontal"
@@ -151,7 +151,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:translationZ="2dp"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 
