@@ -2,23 +2,37 @@ package com.example.pepbandapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class AttendanceFragment extends AppCompatActivity {
+public class AttendanceFragment extends MainActivity implements MyRecyclerViewAdapter.ItemClickListener{
     TextView attendanceNameTextView, attendanceDateTextView;
     ImageButton previousEventButton, nextEventButton;
     EditText eventNameEditText, eventDateEditText;
@@ -26,14 +40,21 @@ public class AttendanceFragment extends AppCompatActivity {
     ArrayList<Event> eventList = new ArrayList<>();
     ArrayList<Member> memberList = new ArrayList<>();
     Event currentlyDisplayedEvent;
+    Intent i;
 
     MyRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        final Context context = this;
         setContentView(R.layout.fragment_attendance);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        if (Build.VERSION.SDK_INT >= 21) {
+            //getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        }
+        setSupportActionBar(toolbar);
+        final Context context = this;
         attendanceNameTextView = (TextView) findViewById(R.id.att_name_textview);
         attendanceDateTextView = (TextView) findViewById(R.id.att_date_textview);
         previousEventButton = findViewById(R.id.back_button);
@@ -42,7 +63,7 @@ public class AttendanceFragment extends AppCompatActivity {
         eventDateEditText = (EditText) findViewById(R.id.event_date_edittext);
         dbHandler = new EventsHandler(this);
 
-        Intent i = getIntent();
+        i = getIntent();
         currentlyDisplayedEvent = i.getParcelableExtra("currentlyDisplayedEvent");
         eventList = i.getParcelableArrayListExtra("eventList");
         memberList = i.getParcelableArrayListExtra("memberList");
@@ -53,6 +74,17 @@ public class AttendanceFragment extends AppCompatActivity {
         adapter = new MyRecyclerViewAdapter(this, memberList, currentlyDisplayedEvent);
         //adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
+
+        drawer = findViewById(R.id.included_toolbar);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState(); // This is what adds the menu button
+        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        //NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        //NavigationUI.setupWithNavController(navigationView, navController);
+        navigationView.setNavigationItemSelectedListener(this);
 
         SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
 
@@ -77,7 +109,11 @@ public class AttendanceFragment extends AppCompatActivity {
                 }
             }
         });
+
+        adapter.setClickListener(this);
     }
+
+
 
     public void searchButtonClicked(View view) {
         String searchName = eventNameEditText.getText().toString();
@@ -133,5 +169,11 @@ public class AttendanceFragment extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    @Override
+    public void onItemClick() {
+        i.putParcelableArrayListExtra("savedEventList", eventList);
+        Log.d("Tag", "Pushing attendance");
     }
 }

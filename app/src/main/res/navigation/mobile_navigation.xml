@@ -32,12 +32,12 @@
     <fragment
         android:id="@+id/nav_attendance"
         android:name="com.example.pepbandapp.ui.gallery.AttendanceFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/attendance_menu"
         tools:layout="@layout/fragment_attendance" />
 
     <fragment
         android:id="@+id/nav_members"
         android:name="com.example.pepbandapp.ui.slideshow.MembersFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/members_menu"
         tools:layout="@layout/fragment_members" />
 </navigation>

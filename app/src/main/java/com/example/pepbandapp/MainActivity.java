@@ -1,7 +1,9 @@
 package com.example.pepbandapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 
@@ -9,6 +11,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -22,15 +28,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppBarConfiguration mAppBarConfiguration;
 
     public ArrayList<Event> eventList = new ArrayList<>();
     public ArrayList<Member> memberList = new ArrayList<>();
 
+    DrawerLayout drawer;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -43,20 +51,38 @@ public class MainActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //            }
 //        });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
+        /*mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_events, R.id.nav_attendance, R.id.nav_members)
                 .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+                .build();*/
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState(); // This is what adds the menu button
+        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        //NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        //NavigationUI.setupWithNavController(navigationView, navController);
+        navigationView.setNavigationItemSelectedListener(this);
 
         memberList.add(new Member("Ryan McLarty", "2021", "Trumpet", "testR"));
         memberList.add(new Member("Chiara Giammatteo", "2021", "Trumpet", "testC"));
+        memberList.add(new Member("David Andreas", "2022", "Percussion", "testD"));
+        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
+
+        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
+
+        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
 
         Calendar cal = Calendar.getInstance(); // This is now the only way to do M/D/Y in Java!
         cal.set(2020, 1, 1);
@@ -65,9 +91,6 @@ public class MainActivity extends AppCompatActivity {
         eventList.add(new Event("Test2", "Test2", "Test2", cal.getTime(), memberList));
         SortEventDates();
 
-        //eventList.get(0).SetMemberAttendedEmailed(memberList.get(0), true, false);
-        eventList.get(0).SetEventMemberAttendance(memberList.get(0), true, false);
-        eventList.get(0).SetEventMemberAttendance(memberList.get(1), false, true);
         Log.d("tag2", eventList.get(0).memberAttendance.get(0).member.get_name());
         Log.d("tag2", Integer.toString(eventList.get(0).memberAttendance.get(0).attended ? 1 : 0));
 
@@ -113,5 +136,35 @@ public class MainActivity extends AppCompatActivity {
                 j--;
             }
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int id = menuItem.getItemId();
+
+        if (menuItem.isChecked())
+        {
+            drawer.closeDrawer(GravityCompat.START);
+            return false;
+        }
+
+        Intent intent = null;
+
+        if (id == R.id.nav_events)
+        {
+            //startActivity(new Intent(getApplicationContext(), ))
+        } else if (id == R.id.nav_attendance)
+        {
+            intent = new Intent(getApplicationContext(), AttendanceFragment.class);
+            intent.putExtra("currentlyDisplayedEvent", eventList.get(0));
+            intent.putParcelableArrayListExtra("eventList", eventList);
+            intent.putParcelableArrayListExtra("memberList", memberList);
+        } else if (id == R.id.nav_members)
+        {
+
+        }
+        startActivity(intent);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
