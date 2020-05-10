@@ -1,11 +1,17 @@
 package com.example.pepbandapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +19,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
-public class MembersFragment extends AppCompatActivity {
+public class MembersFragment extends MainActivity {
     TextView studentNameTextView, yearTextView, instrumentTextView, emailTextView, membersTextView;
     MembersHandler dbHandler;
 
@@ -21,6 +27,18 @@ public class MembersFragment extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_members);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        final Context context = this;
+
+        drawer = findViewById(R.id.members_drawer);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+
         studentNameTextView = (TextView) findViewById(R.id.studentname_textview);
         yearTextView = (TextView) findViewById(R.id.year_textview);
         instrumentTextView = (TextView) findViewById(R.id.instrument_textview);
@@ -29,6 +47,15 @@ public class MembersFragment extends AppCompatActivity {
         /* Can pass nulls because of the constants in the helper.
          * the 1 means version 1 so don't run update.
          */
+
+        Intent i = getIntent();
+        GetIntentExtras(i);
+
+        if (navigationView.getMenu().findItem(selectedMenuID) != null)
+        {
+            navigationView.getMenu().findItem(selectedMenuID).setChecked(true);
+        }
+
         dbHandler = new MembersHandler(this);
         printDatabase();
     }
@@ -49,7 +76,7 @@ public class MembersFragment extends AppCompatActivity {
         membersTextView.setText(resultsString);
     }
 
-    public void readInMembers(View view) {
+    /*public void readInMembers(View view) {
         InputStream is = getResources().openRawResource(R.raw.members_data);
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(is, Charset.forName("UTF-8"))
@@ -77,5 +104,5 @@ public class MembersFragment extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 }

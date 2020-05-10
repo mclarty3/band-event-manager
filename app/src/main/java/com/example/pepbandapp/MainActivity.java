@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public ArrayList<Event> eventList = new ArrayList<>();
     public ArrayList<Member> memberList = new ArrayList<>();
+    public Event currentlyDisplayedEvent;
+    public int selectedMenuID;
 
     DrawerLayout drawer;
 
@@ -73,16 +75,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         memberList.add(new Member("David Andreas", "2022", "Percussion", "testD"));
         memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
 
-        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum2", "2020", "Tenor Sax", "testJ"));
 
-        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum3", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum4", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum5", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum6", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum7", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum8", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum9", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum0", "2020", "Tenor Sax", "testJ"));
 
         Calendar cal = Calendar.getInstance(); // This is now the only way to do M/D/Y in Java!
         cal.set(2020, 1, 1);
@@ -150,21 +152,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Intent intent = null;
 
-        if (id == R.id.nav_events)
+        if (id == R.id.nav_schedule)
         {
+            intent = new Intent(getApplicationContext(), EventsFragment.class);
             //startActivity(new Intent(getApplicationContext(), ))
         } else if (id == R.id.nav_attendance)
         {
             intent = new Intent(getApplicationContext(), AttendanceFragment.class);
+        } else if (id == R.id.nav_members)
+        {
+            intent = new Intent(getApplicationContext(), MembersFragment.class);
+        }
+        if (intent != null) {
             intent.putExtra("currentlyDisplayedEvent", eventList.get(0));
             intent.putParcelableArrayListExtra("eventList", eventList);
             intent.putParcelableArrayListExtra("memberList", memberList);
-        } else if (id == R.id.nav_members)
-        {
-
+            intent.putExtra("SELECTED_DRAWER_ITEM", menuItem.getItemId());
+            startActivity(intent);
         }
-        startActivity(intent);
         drawer.closeDrawer(GravityCompat.START);
+        finish();
         return true;
+    }
+
+    void GetIntentExtras(Intent intent)
+    {
+        currentlyDisplayedEvent = intent.getParcelableExtra("currentlyDisplayedEvent");
+        eventList = intent.getParcelableArrayListExtra("eventList");
+        memberList = intent.getParcelableArrayListExtra("memberList");
+        selectedMenuID = intent.getIntExtra("SELECTED_DRAWER_ITEM", -1);
     }
 }

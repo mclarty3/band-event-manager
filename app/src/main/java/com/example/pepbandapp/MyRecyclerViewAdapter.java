@@ -91,6 +91,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             attendedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Log.d("good", "updating checks");
                     UpdateAttendedEmailed(thisHolder);
                 }
             });
@@ -98,6 +99,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             emailedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Log.d("good", "updating checks");
                     UpdateAttendedEmailed(thisHolder);
                 }
             });
@@ -120,7 +122,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             eventData.SetMemberAttendedEmailed(listItem.member, listItem.attended, listItem.emailed);
         }*/
         eventData.SetEventMemberAttendance(listItem.member, listItem.attended, listItem.emailed);
-        if (mClickListener != null) mClickListener.onItemClick();
+        //if (mClickListener != null) mClickListener.onItemClick();
+        //else Log.d("listener", "is null");
     }
 
     // convenience method for getting data at click position

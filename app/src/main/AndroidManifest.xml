@@ -22,8 +22,12 @@
         <activity
             android:name=".AttendanceFragment"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".MembersFragment"/>
-        <activity android:name=".ScheduleFragment"/>
+        <activity
+            android:name=".MembersFragment"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".EventsFragment"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".EditEvents" />
         <activity android:name=".EditMembers"/>
     </application>

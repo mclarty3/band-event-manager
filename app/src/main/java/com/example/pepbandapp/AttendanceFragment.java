@@ -37,9 +37,8 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
     ImageButton previousEventButton, nextEventButton;
     EditText eventNameEditText, eventDateEditText;
     EventsHandler dbHandler;
-    ArrayList<Event> eventList = new ArrayList<>();
-    ArrayList<Member> memberList = new ArrayList<>();
-    Event currentlyDisplayedEvent;
+    //ArrayList<Event> eventList = new ArrayList<>();
+    //ArrayList<Member> memberList = new ArrayList<>();
     Intent i;
 
     MyRecyclerViewAdapter adapter;
@@ -49,12 +48,9 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
         super.onCreate(savedInstance);
         setContentView(R.layout.fragment_attendance);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        if (Build.VERSION.SDK_INT >= 21) {
-            //getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        }
         setSupportActionBar(toolbar);
         final Context context = this;
+
         attendanceNameTextView = (TextView) findViewById(R.id.att_name_textview);
         attendanceDateTextView = (TextView) findViewById(R.id.att_date_textview);
         previousEventButton = findViewById(R.id.back_button);
@@ -64,15 +60,23 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
         dbHandler = new EventsHandler(this);
 
         i = getIntent();
-        currentlyDisplayedEvent = i.getParcelableExtra("currentlyDisplayedEvent");
-        eventList = i.getParcelableArrayListExtra("eventList");
-        memberList = i.getParcelableArrayListExtra("memberList");
+        GetIntentExtras(i);
+
+        SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
+        for (int event = 0; event < eventList.size(); event++)
+        {
+            if (eventList.get(event) == currentlyDisplayedEvent)
+            {
+                eventList.get(event).UpdateEvent(currentlyDisplayedEvent);
+                break;
+            }
+        }
 
         // Set up attendance list
         final RecyclerView recyclerView = findViewById(R.id.attendance_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyRecyclerViewAdapter(this, memberList, currentlyDisplayedEvent);
-        //adapter.setClickListener(this);
+        adapter = new MyRecyclerViewAdapter(context, memberList, currentlyDisplayedEvent);
+        adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
         drawer = findViewById(R.id.included_toolbar);
@@ -80,13 +84,15 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
-        toggle.syncState(); // This is what adds the menu button
-        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        //NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        //NavigationUI.setupWithNavController(navigationView, navController);
+        toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
+        if (navigationView.getMenu().findItem(selectedMenuID) != null)
+        {
+            navigationView.getMenu().findItem(selectedMenuID).setChecked(true);
+        }
+
+
 
         previousEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,6 +151,7 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
         {
             if (eventList.get(i).get_name().equals(currentlyDisplayedEvent.get_name()))
             {
+                Log.d("event change", "updating event");
                 eventList.get(i).UpdateEvent(currentlyDisplayedEvent);
                 currentlyDisplayedEvent = eventList.get(i - 1);
                 break;
@@ -163,6 +170,7 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
         {
             if (eventList.get(i).get_name().equals(currentlyDisplayedEvent.get_name()))
             {
+                Log.d("event change", "updating event");
                 eventList.get(i).UpdateEvent(currentlyDisplayedEvent);
                 currentlyDisplayedEvent = eventList.get(i + 1);
                 break;
