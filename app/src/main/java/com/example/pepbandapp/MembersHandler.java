@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class MembersHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "memberDB.db";
     public static final String TABLE_MEMBERS = "Members";
     //public static final String COLUMN_ID = "_id";
@@ -23,7 +23,7 @@ public class MembersHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + TABLE_MEMBERS + "(" + COLUMN_NAME + " TEXT," + COLUMN_YEAR + " TEXT," + COLUMN_INSTRUMENT + " TEXT," + COLUMN_EMAIL + " TEXT );";
+        String query = "CREATE TABLE " + TABLE_MEMBERS + "(" + COLUMN_NAME + " TEXT, " + COLUMN_YEAR + " TEXT, " + COLUMN_INSTRUMENT + " TEXT, " + COLUMN_EMAIL + " TEXT );";
         db.execSQL(query);
     }
 
@@ -48,7 +48,7 @@ public class MembersHandler extends SQLiteOpenHelper {
     //delete a member from the database
     public void deleteMember(String memberName) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_MEMBERS + "WHERE" + COLUMN_NAME + "=" + memberName + ";");
+        db.execSQL("DELETE FROM " + TABLE_MEMBERS + " WHERE " + COLUMN_NAME + " ='" + memberName + "';");
     }
 
     public String databaseToString(){
@@ -88,7 +88,7 @@ public class MembersHandler extends SQLiteOpenHelper {
         String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
 
-        String query = "SELECT Year, Name, Instrument, Email FROM " + TABLE_MEMBERS + " GROUP BY Year;";
+        String query = "SELECT * FROM " + TABLE_MEMBERS + " GROUP BY Year;";
 
         //Cursor points to a location in your results
         Cursor recordSet = db.rawQuery(query, null);
@@ -137,7 +137,7 @@ public class MembersHandler extends SQLiteOpenHelper {
                 dbString += ",   ";
                 dbString += recordSet.getString(recordSet.getColumnIndex("Year"));
                 dbString += ",   ";
-                dbString += recordSet.getString(recordSet.getColumnIndex("email"));
+                dbString += recordSet.getString(recordSet.getColumnIndex("Email"));
                 dbString += "\n";
             }
             recordSet.moveToNext();
