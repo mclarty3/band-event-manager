@@ -42,8 +42,6 @@ public class ScheduleFragment extends AppCompatActivity{
         /* Can pass nulls because of the constants in the helper.
          * the 1 means version 1 so don't run update.
          */
-        dbHandler = new EventsHandler(this);
-        printDatabase();
     }
 
     //Print the database

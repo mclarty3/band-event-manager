@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MembersHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "memberDB.db";
@@ -23,12 +26,21 @@ public class MembersHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + TABLE_MEMBERS + "(" + COLUMN_NAME + " TEXT, " + COLUMN_YEAR + " TEXT, " + COLUMN_INSTRUMENT + " TEXT, " + COLUMN_EMAIL + " TEXT );";
+        String query = "CREATE TABLE " + TABLE_MEMBERS +
+                "(" + COLUMN_NAME + " TEXT, " + COLUMN_YEAR + " TEXT, " +
+                COLUMN_INSTRUMENT + " TEXT, " + COLUMN_EMAIL + " TEXT );";
         db.execSQL(query);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEMBERS);
+        onCreate(db);
+    }
+
+    public void DropTable()
+    {
+        SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEMBERS);
         onCreate(db);
     }
@@ -146,4 +158,32 @@ public class MembersHandler extends SQLiteOpenHelper {
         return dbString;
     }
 
+    public ArrayList<Member> GetMemberList()
+    {
+        ArrayList<Member> members = new ArrayList<>();
+        String dbString = "";
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_MEMBERS + " WHERE 1";
+
+        //Cursor points to a location in your results
+        Cursor recordSet = db.rawQuery(query, null);
+        //Move to the first row in your results
+        recordSet.moveToFirst();
+
+        //Position after the last row means the end of the results
+        while (!recordSet.isAfterLast()) {
+            // null could happen if we used our empty constructor
+            if (recordSet.getString(recordSet.getColumnIndex("Name")) != null) {
+                Member member = new Member("","","","");
+                member.set_name(recordSet.getString(0));
+                member.set_year(recordSet.getString(1));
+                member.set_instrument(recordSet.getString(2));
+                member.set_email(recordSet.getString(3));
+                members.add(member);
+            }
+            recordSet.moveToNext();
+        }
+
+        return members;
+    }
 }

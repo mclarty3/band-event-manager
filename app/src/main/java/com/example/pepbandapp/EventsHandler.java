@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 
 public class EventsHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
@@ -112,4 +116,38 @@ public class EventsHandler extends SQLiteOpenHelper {
         return dbString;
     }
 
+    public ArrayList<Event> GetEventList(ArrayList<Member> memberList)
+    {
+        ArrayList<Event> events = new ArrayList<>();
+        String dbString = "";
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_EVENTS + " WHERE 1";
+
+        //Cursor points to a location in your results
+        Cursor recordSet = db.rawQuery(query, null);
+        //Move to the first row in your results
+        recordSet.moveToFirst();
+
+        //Position after the last row means the end of the results
+        while (!recordSet.isAfterLast()) {
+            // null could happen if we used our empty constructor
+            if (recordSet.getString(recordSet.getColumnIndex("Name")) != null) {
+                String name = recordSet.getString(0);
+                String info = recordSet.getString(1);
+                String location = recordSet.getString(2);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                Date date = null;
+                try {
+                    date = simpleDateFormat.parse(recordSet.getString(3));
+                } catch (java.text.ParseException e)
+                {
+                    e.printStackTrace();
+                }
+                events.add(new Event(name, info, location, date, memberList));
+            }
+            recordSet.moveToNext();
+        }
+
+        return events;
+    }
 }

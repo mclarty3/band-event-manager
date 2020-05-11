@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Event currentlyDisplayedEvent;
     public int selectedMenuID;
 
+    public static MembersHandler memberDB;
+    public static EventsHandler eventsDB;
+
     DrawerLayout drawer;
 
     @Override
@@ -70,7 +73,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //NavigationUI.setupWithNavController(navigationView, navController);
         navigationView.setNavigationItemSelectedListener(this);
 
-        memberList.add(new Member("Ryan McLarty", "2021", "Trumpet", "testR"));
+        memberDB = new MembersHandler(getApplicationContext());
+        eventsDB = new EventsHandler(getApplicationContext());
+
+        memberDB.DropTable();
+        memberDB.addMember(new Member("test3", "Test", "test", "test"));
+
+        if (memberList.size() == 0)
+        {
+            memberList = memberDB.GetMemberList();
+            memberDB.close();
+        }
+        if (eventList.size() == 0)
+        {
+            eventList = eventsDB.GetEventList(memberList);
+            eventsDB.close();
+        }
+
+        /*memberList.add(new Member("Ryan McLarty", "2021", "Trumpet", "testR"));
         memberList.add(new Member("Chiara Giammatteo", "2021", "Trumpet", "testC"));
         memberList.add(new Member("David Andreas", "2022", "Percussion", "testD"));
         memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
@@ -84,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         memberList.add(new Member("Julia Baum7", "2020", "Tenor Sax", "testJ"));
         memberList.add(new Member("Julia Baum8", "2020", "Tenor Sax", "testJ"));
         memberList.add(new Member("Julia Baum9", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum0", "2020", "Tenor Sax", "testJ"));
+        memberList.add(new Member("Julia Baum0", "2020", "Tenor Sax", "testJ"));*/
 
         Calendar cal = Calendar.getInstance(); // This is now the only way to do M/D/Y in Java!
         cal.set(2020, 1, 1);
@@ -92,9 +112,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cal.set(2020, 0, 23);
         eventList.add(new Event("Test2", "Test2", "Test2", cal.getTime(), memberList));
         SortEventDates();
-
-        Log.d("tag2", eventList.get(0).memberAttendance.get(0).member.get_name());
-        Log.d("tag2", Integer.toString(eventList.get(0).memberAttendance.get(0).attended ? 1 : 0));
 
         //memberList.get(0).set_name(String.valueOf(eventList.get(0).eventAttendence.get(memberList.get(0))));
     }
@@ -111,18 +128,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
-
-    public Member GetMember(String name)
-    {
-        for (Member member: memberList)
-        {
-            if (member.get_name() == name)
-            {
-                return member;
-            }
-        }
-        return null;
     }
 
     private void SortEventDates()

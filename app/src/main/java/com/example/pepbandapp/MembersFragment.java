@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -19,11 +21,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.List;
 
 public class MembersFragment extends MainActivity {
     TextView studentNameTextView, yearTextView, instrumentTextView, emailTextView, membersTextView;
     EditText memberNameEditText, memberYearEditText, memberInstrumentEditText, memberEmailEditText;
     MembersHandler dbHandler;
+    MyRecyclerViewMemberAdapter adapter;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,13 @@ public class MembersFragment extends MainActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final Context context = this;
+
+        // Set up attendance list
+        recyclerView = findViewById(R.id.member_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MyRecyclerViewMemberAdapter(context, memberList);
+        //adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
 
         drawer = findViewById(R.id.members_drawer);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -45,7 +57,6 @@ public class MembersFragment extends MainActivity {
         yearTextView = (TextView) findViewById(R.id.year_textview);
         instrumentTextView = (TextView) findViewById(R.id.instrument_textview);
         emailTextView = (TextView) findViewById(R.id.email_textview);
-        membersTextView = (TextView) findViewById(R.id.members_textview);
         memberNameEditText = (EditText) findViewById(R.id.membername_edittext);
         memberYearEditText = (EditText) findViewById(R.id.memberyear_edittext);
         memberInstrumentEditText = (EditText) findViewById(R.id.memberinstrument_edittext);
@@ -62,14 +73,15 @@ public class MembersFragment extends MainActivity {
             navigationView.getMenu().findItem(selectedMenuID).setChecked(true);
         }
 
-        dbHandler = new MembersHandler(this);
-        printDatabase();
+        //dbHandler = new MembersHandler(this);
+        dbHandler = MainActivity.memberDB;
+        //printDatabase();
     }
 
     //Print the database
     public void printDatabase(){
-        String dbString = dbHandler.databaseToString();
-        membersTextView.setText(dbString);
+        //String dbString = dbHandler.databaseToString();
+        //membersTextView.setText(memberList.get(0).get_name());
     }
 
     //add your elements onclick methods.
@@ -79,7 +91,9 @@ public class MembersFragment extends MainActivity {
         Member member =
                 new Member(memberNameEditText.getText().toString(), memberYearEditText.getText().toString(), memberInstrumentEditText.getText().toString(), memberEmailEditText.getText().toString());
         dbHandler.addMember(member);
-        printDatabase();
+        memberList.add(member);
+        adapter = new MyRecyclerViewMemberAdapter(this, memberList);
+        recyclerView.setAdapter(adapter);
     }
 
     //Delete items
