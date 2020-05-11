@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,6 +50,26 @@ public class Event implements Parcelable {
         this._location = location;
         this._date = date;
         this.eventAttendence = attendance;
+    }
+
+    public static Date StringToDate(String string)
+    {
+        if (string.length() == 10 && string.charAt(2) == '/' && string.charAt(5) == '/')
+        {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            Date date = null;
+            try {
+                date = simpleDateFormat.parse(string);
+            } catch (java.text.ParseException e)
+            {
+                e.printStackTrace();
+            }
+            return date;
+        }
+        else
+        {
+            return null;
+        }
     }
 
 
