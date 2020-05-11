@@ -140,6 +140,7 @@ public class EventsHandler extends SQLiteOpenHelper {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(is, Charset.forName("UTF-8")));
         String line = "";
+        ArrayList<Event> events = new ArrayList<>();
         db.beginTransaction();
         try {
             while ((line = reader.readLine()) != null) {
@@ -149,13 +150,15 @@ public class EventsHandler extends SQLiteOpenHelper {
                     continue;
                 }
 
-                ArrayList<Event> events;
+
                 String Name = colums[0];
                 String Info = colums[1];
                 String Location = colums[2];
                 String Date = colums[3];
-
-                events.add(new Event(Name, Info, Location, Date, new ArrayList<Member>() );
+                Log.d("test", Date);
+                Event event = new Event(Name, Info, Location, Event.StringToDate(Date), new ArrayList<Member>());
+                events.add(event);
+                Log.d("test", (event.get_date() == null ? "null":"not null"));
 
                 ContentValues cv = new ContentValues(3);
                 cv.put(COLUMN_NAME, colums[0]);
@@ -167,8 +170,11 @@ public class EventsHandler extends SQLiteOpenHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         db.close();
+        return events;
     }
+
     public ArrayList<Event> GetEventList(ArrayList<Member> memberList)
     {
         ArrayList<Event> events = new ArrayList<>();

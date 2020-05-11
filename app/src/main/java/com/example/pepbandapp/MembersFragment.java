@@ -152,5 +152,9 @@ public class MembersFragment extends MainActivity {
     public void readInMembers(View view) {
         InputStream is = getResources().openRawResource(R.raw.members_data);
         memberList = dbHandler.readIn(is);
+        dbHandler.close();
+        adapter = new MyRecyclerViewMemberAdapter(getApplicationContext(), memberList);
+        //adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
     }
 }

@@ -136,7 +136,10 @@ public class EventsFragment extends MainActivity {
 
     public void readInEvents(View view) {
         InputStream is = getResources().openRawResource(R.raw.events_data);
-        dbHandler.readInData(is);
-        printDatabase();
+        eventList = dbHandler.readInData(is);
+        dbHandler.close();
+        adapter = new MyRecyclerViewEventAdapter(getApplicationContext(), eventList);
+        //adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
     }
 }
