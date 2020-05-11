@@ -76,7 +76,7 @@ public class MembersFragment extends MainActivity {
         membersTextView.setText(resultsString);
     }
 
-    /*public void readInMembers(View view) {
+    public void readInMembers(View view) {
         InputStream is = getResources().openRawResource(R.raw.members_data);
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(is, Charset.forName("UTF-8"))
@@ -104,5 +104,5 @@ public class MembersFragment extends MainActivity {
                 e.printStackTrace();
             }
         }
-    }*/
+    }
 }
