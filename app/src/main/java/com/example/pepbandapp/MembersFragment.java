@@ -151,7 +151,6 @@ public class MembersFragment extends MainActivity {
 
     public void readInMembers(View view) {
         InputStream is = getResources().openRawResource(R.raw.members_data);
-        dbHandler.readIn(is);
-        printDatabase();
+        memberList = dbHandler.readIn(is);
     }
 }
