@@ -73,34 +73,88 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/event_list"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            app:layout_constraintTop_toBottomOf="@+id/column_title_layout"/>
+            android:layout_height="333dp"
+            app:layout_constraintTop_toBottomOf="@+id/column_title_layout" />
 
-        <Button
-            android:id="@+id/button_edit"
-            android:layout_width="100dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="17dp"
-            android:layout_marginBottom="72dp"
-            android:text="@string/edit"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_readin"
-            app:layout_constraintHorizontal_bias="0.283"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/schedule_textview" />
 
-        <Button
-            android:id="@+id/button_readin"
-            android:layout_width="100dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="17dp"
-            android:layout_marginEnd="52dp"
-            android:layout_marginBottom="72dp"
-            android:text="@string/read_in"
-            android:onClick="readInData"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/schedule_textview" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="275dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/editTextsLinLayout"
+                android:layout_width="292dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/eventname_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/event_name"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/eventinfo_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/event_info"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/eventlocation_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/event_location"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/date_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/event_date"
+                    android:inputType="date" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/button_readin"
+                    android:layout_width="100dp"
+                    android:layout_height="60dp"
+                    android:onClick="readInData"
+                    android:text="@string/read_in" />
+
+                <Button
+                    android:id="@+id/button_add"
+                    android:layout_width="100dp"
+                    android:layout_height="60dp"
+                    android:onClick="addButtonClicked"
+                    android:text="@string/add"
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/remove_button"
+                    android:layout_width="100dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:onClick="deleteButtonClicked"
+                    android:text="@string/remove"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView

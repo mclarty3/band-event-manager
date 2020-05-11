@@ -23,7 +23,7 @@ public class MembersHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + TABLE_MEMBERS + "(" + COLUMN_NAME + "TEXT," + COLUMN_YEAR + "TEXT," + COLUMN_INSTRUMENT + "TEXT," + COLUMN_EMAIL + "TEXT );";
+        String query = "CREATE TABLE " + TABLE_MEMBERS + "(" + COLUMN_NAME + " TEXT," + COLUMN_YEAR + " TEXT," + COLUMN_INSTRUMENT + " TEXT," + COLUMN_EMAIL + " TEXT );";
         db.execSQL(query);
     }
 
@@ -39,7 +39,7 @@ public class MembersHandler extends SQLiteOpenHelper {
         values.put(COLUMN_NAME, member.get_name());
         values.put(COLUMN_YEAR, member.get_year());
         values.put(COLUMN_INSTRUMENT, member.get_instrument());
-        values.put(COLUMN_EMAIL, member.get_instrument());
+        values.put(COLUMN_EMAIL, member.get_email());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_MEMBERS, null, values);
         db.close();

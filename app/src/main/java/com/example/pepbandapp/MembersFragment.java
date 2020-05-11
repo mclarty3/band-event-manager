@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -21,6 +22,7 @@ import java.nio.charset.Charset;
 
 public class MembersFragment extends MainActivity {
     TextView studentNameTextView, yearTextView, instrumentTextView, emailTextView, membersTextView;
+    EditText memberNameEditText, memberYearEditText, memberInstrumentEditText, memberEmailEditText;
     MembersHandler dbHandler;
 
     @Override
@@ -44,6 +46,10 @@ public class MembersFragment extends MainActivity {
         instrumentTextView = (TextView) findViewById(R.id.instrument_textview);
         emailTextView = (TextView) findViewById(R.id.email_textview);
         membersTextView = (TextView) findViewById(R.id.members_textview);
+        memberNameEditText = (EditText) findViewById(R.id.membername_edittext);
+        memberYearEditText = (EditText) findViewById(R.id.memberyear_edittext);
+        memberInstrumentEditText = (EditText) findViewById(R.id.memberinstrument_edittext);
+        memberEmailEditText = (EditText) findViewById(R.id.memberemail_edittext);
         /* Can pass nulls because of the constants in the helper.
          * the 1 means version 1 so don't run update.
          */
@@ -64,6 +70,24 @@ public class MembersFragment extends MainActivity {
     public void printDatabase(){
         String dbString = dbHandler.databaseToString();
         membersTextView.setText(dbString);
+    }
+
+    //add your elements onclick methods.
+    //Add a product to the database
+    public void addMemberButtonClicked(View view){
+        // dbHandler.add needs an object parameter.
+        Member member =
+                new Member(memberNameEditText.getText().toString(), memberYearEditText.getText().toString(), memberInstrumentEditText.getText().toString(), memberEmailEditText.getText().toString());
+        dbHandler.addMember(member);
+        printDatabase();
+    }
+
+    //Delete items
+    public void deleteMemberButtonClicked(View view){
+        // dbHandler delete needs string to find in the db
+        String inputText = memberNameEditText.getText().toString();
+        dbHandler.deleteMember(inputText);
+        printDatabase();
     }
 
     public void groupByYear(View view) {

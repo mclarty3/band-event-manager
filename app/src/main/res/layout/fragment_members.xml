@@ -71,58 +71,124 @@
         <TextView
             android:id="@+id/members_textview"
             android:layout_width="408dp"
-            android:layout_height="386dp"
+            android:layout_height="297dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/column_title_layout" />
 
-        <Button
-            android:id="@+id/button_edit"
-            android:layout_width="100dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="17dp"
-            android:layout_marginBottom="36dp"
-            android:text="@string/edit"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_readin"
-            app:layout_constraintHorizontal_bias="0.276"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/members_textview" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/button_readin"
-            android:layout_width="100dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="17dp"
-            android:layout_marginEnd="60dp"
-            android:layout_marginBottom="36dp"
-            android:text="@string/read_in"
-            android:onClick="readInMembers"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/members_textview" />
+            <Button
+                android:id="@+id/button_readin"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:layout_gravity="left|center_vertical"
+                android:onClick="readInMembers"
+                android:text="@string/read_in" />
 
-        <Button
-            android:id="@+id/button_group_year"
-            android:layout_width="100dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="40dp"
-            android:text="@string/group_by_year"
-            android:onClick="groupByYear"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/members_textview" />
+            <Button
+                android:id="@+id/button_group_year"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:onClick="groupByYear"
+                android:text="@string/group_by_year" />
 
-        <Button
-            android:id="@+id/button_group_instrument"
-            android:layout_width="100dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="60dp"
-            android:text="@string/group_by_instrument"
-            android:textSize="12sp"
-            android:onClick="groupByInstrument"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/members_textview" />
+            <Button
+                android:id="@+id/button_group_instrument"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:layout_gravity="right|center_vertical"
+                android:onClick="groupByInstrument"
+                android:text="@string/group_by_instrument"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/editText_layout"
+                android:layout_width="236dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/membername_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/member_name"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/memberyear_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/member_year"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/memberinstrument_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/member_instrument"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/memberemail_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/member_email"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/addRemoveLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/button_add"
+                    android:layout_width="105dp"
+                    android:layout_height="31dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:onClick="addMemberButtonClicked"
+                    android:text="@string/add"
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/remove_button"
+                    android:layout_width="105dp"
+                    android:layout_height="31dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:onClick="deleteMemberButtonClicked"
+                    android:text="@string/remove"
+                    android:textSize="18sp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
