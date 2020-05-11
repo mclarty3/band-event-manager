@@ -134,35 +134,9 @@ public class EventsFragment extends MainActivity {
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
-    public void readInData(View view) {
+    public void readInEvents(View view) {
         InputStream is = getResources().openRawResource(R.raw.events_data);
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(is, Charset.forName("UTF-8"))
-        );
-
-        String line = "";
-        while (true) {
-            try {
-                //split by ","
-                String[] tokens = line.split(",");
-
-                //read the data
-                Event event = null;
-                event.set_name(tokens[0]);
-                event.set_info(tokens[1]);
-                event.set_location(tokens[2]);
-                Date date = formatter.parse(tokens[3]);
-                event.set_date(date);
-                dbHandler.addEvent(event);
-
-                Log.d("ScheduleActivity", "Just created: " + event);
-
-                if (!((line = reader.readLine()) != null)) break;
-            } catch (IOException | ParseException e) {
-                Log.wtf("ScheduleActivity", "Error reading data file on line " + line, e);
-                e.printStackTrace();
-            }
-
-        }
+        dbHandler.readInData(is);
+        printDatabase();
     }
 }

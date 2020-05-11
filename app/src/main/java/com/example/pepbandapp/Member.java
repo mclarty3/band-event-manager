@@ -16,6 +16,15 @@ public class Member implements Parcelable {
         this._email = email;
     }
 
+    //default constructor
+    public Member() {
+        _name = "Name";
+        _year = "Year";
+        _instrument = "Instrument";
+        _email = "Email";
+
+    }
+
     public String get_name() {
         return _name;
     }

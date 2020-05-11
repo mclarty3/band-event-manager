@@ -131,7 +131,7 @@
                     android:id="@+id/button_readin"
                     android:layout_width="100dp"
                     android:layout_height="60dp"
-                    android:onClick="readInData"
+                    android:onClick="readInEvents"
                     android:text="@string/read_in" />
 
                 <Button

@@ -5,7 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -129,6 +135,31 @@ public class EventsHandler extends SQLiteOpenHelper {
         return dbString;
     }
 
+    public void readInData(InputStream is) {
+        SQLiteDatabase db = getWritableDatabase();
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(is, Charset.forName("UTF-8")));
+        String line = "";
+        db.beginTransaction();
+        try {
+            while ((line = reader.readLine()) != null) {
+                String[] colums = line.split(",");
+                if (colums.length != 4) {
+                    Log.d("CSVParser", "columns length = " + colums.length + "column[0] = " + colums[0] + " column[1] = " + colums[1] + " colum[2] = "+ colums[2] + " colum[3] = " + colums[3] + " colum[4] = " + colums[4]);
+                    continue;
+                }
+                ContentValues cv = new ContentValues(3);
+                cv.put(COLUMN_NAME, colums[0]);
+                cv.put(COLUMN_INFO, colums[1]);
+                cv.put(COLUMN_LOCATION, colums[2]);
+                cv.put(COLUMN_DATE, colums[3]);
+                db.insert(TABLE_EVENTS, null, cv);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        db.close();
+    }
     public ArrayList<Event> GetEventList(ArrayList<Member> memberList)
     {
         ArrayList<Event> events = new ArrayList<>();
