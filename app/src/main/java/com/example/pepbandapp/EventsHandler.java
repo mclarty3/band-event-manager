@@ -135,7 +135,7 @@ public class EventsHandler extends SQLiteOpenHelper {
         return dbString;
     }
 
-    public void readInData(InputStream is) {
+    public ArrayList<Event> readInData(InputStream is) {
         SQLiteDatabase db = getWritableDatabase();
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -148,6 +148,15 @@ public class EventsHandler extends SQLiteOpenHelper {
                     Log.d("CSVParser", "columns length = " + colums.length + "column[0] = " + colums[0] + " column[1] = " + colums[1] + " colum[2] = "+ colums[2] + " colum[3] = " + colums[3] + " colum[4] = " + colums[4]);
                     continue;
                 }
+
+                ArrayList<Event> events;
+                String Name = colums[0];
+                String Info = colums[1];
+                String Location = colums[2];
+                String Date = colums[3];
+
+                events.add(new Event(Name, Info, Location, Date, new ArrayList<Member>() );
+
                 ContentValues cv = new ContentValues(3);
                 cv.put(COLUMN_NAME, colums[0]);
                 cv.put(COLUMN_INFO, colums[1]);
