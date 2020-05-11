@@ -28,12 +28,25 @@ public class EventsHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + TABLE_EVENTS + "(" + COLUMN_NAME + "TEXT," + COLUMN_INFO + "TEXT," + COLUMN_LOCATION + "TEXT," + COLUMN_DATE + "DATE );";
+        String query = "CREATE TABLE " + TABLE_EVENTS + "(" + COLUMN_NAME + " TEXT," + COLUMN_INFO + " TEXT," + COLUMN_LOCATION + " TEXT," + COLUMN_DATE + " TEXT);";
         db.execSQL(query);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
+        onCreate(db);
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
+        onCreate(db);
+    }
+
+    public void DropTable()
+    {
+        SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
         onCreate(db);
     }

@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EmptyStackException;
 
 public class EventsFragment extends MainActivity {
 
@@ -31,6 +32,7 @@ public class EventsFragment extends MainActivity {
     EditText eventNameEditText, eventInfoEditText, eventLocationEditText, eventDateEditText;
     MyRecyclerViewEventAdapter adapter;
     EventsHandler dbHandler;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -49,12 +51,7 @@ public class EventsFragment extends MainActivity {
         eventLocationEditText = findViewById(R.id.eventlocation_edittext);
         eventDateEditText = findViewById(R.id.date_edittext);
 
-        // Set up event list
-        final RecyclerView recyclerView = findViewById(R.id.event_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyRecyclerViewEventAdapter(context, eventList);
-        //adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
+
 
         drawer = findViewById(R.id.schedule_drawer);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -72,6 +69,13 @@ public class EventsFragment extends MainActivity {
             navigationView.getMenu().findItem(selectedMenuID).setChecked(true);
         }
 
+        // Set up event list
+        recyclerView = findViewById(R.id.event_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MyRecyclerViewEventAdapter(context, eventList);
+        //adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
+
         dbHandler = MainActivity.eventsDB;
     }
 
@@ -85,6 +89,33 @@ public class EventsFragment extends MainActivity {
     //Add a product to the database
     public void addButtonClicked(View view){
         // dbHandler.add needs an object parameter.
+        if (eventDateEditText.getText().toString().length() == 10 &&
+            eventDateEditText.getText().toString().charAt(2) == '/' &&
+            eventDateEditText.getText().toString().charAt(5) == '/')
+        {
+            String name = eventNameEditText.getText().toString();
+            String info = eventInfoEditText.getText().toString();
+            String location = eventLocationEditText.getText().toString();
+            String dateString = eventDateEditText.getText().toString();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            Date date = null;
+            try {
+                date = simpleDateFormat.parse(dateString);
+            } catch (java.text.ParseException e)
+            {
+                e.printStackTrace();
+            }
+            Event event = new Event(name, info, location, date, memberList);
+            dbHandler.addEvent(event);
+            eventList.add(event);
+            adapter = new MyRecyclerViewEventAdapter(this, eventList);
+            recyclerView.setAdapter(adapter);
+        }
+        else
+        {
+            Log.d("AddEvent", "Your date has to be formatted mm/dd/yyyy!");
+            return;
+        }
         ArrayList<Member> test = new ArrayList<>();
         test.add(new Member("Test", "tetst", "temst", "Tset"));
         Event event =

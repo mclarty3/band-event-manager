@@ -77,8 +77,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         memberDB = new MembersHandler(getApplicationContext());
         eventsDB = new EventsHandler(getApplicationContext());
 
+        /*
+           HELLO THESE ARE GOING TO DELETE THE DB EVERY TIME
+           REMOVE IF YOU WANT TO PRESERVE DB
+         */
         memberDB.DropTable();
-        memberDB.addMember(new Member("test3", "Test", "test", "test"));
+        eventsDB.DropTable();
 
         if (memberList.size() == 0)
         {
