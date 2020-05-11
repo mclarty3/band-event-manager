@@ -152,6 +152,11 @@ public class Event implements Parcelable {
         }
     }
 
+    public void AddMemberAttendance(Member member)
+    {
+        memberAttendance.add(new MemberAttendanceRow(member, false, false));
+    }
+
     @Override
     public int describeContents() {
         return 0;

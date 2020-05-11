@@ -92,6 +92,10 @@ public class MembersFragment extends MainActivity {
                 new Member(memberNameEditText.getText().toString(), memberYearEditText.getText().toString(), memberInstrumentEditText.getText().toString(), memberEmailEditText.getText().toString());
         dbHandler.addMember(member);
         memberList.add(member);
+        for (Event event: eventList)
+        {
+            event.AddMemberAttendance(member);
+        }
         adapter = new MyRecyclerViewMemberAdapter(this, memberList);
         recyclerView.setAdapter(adapter);
     }

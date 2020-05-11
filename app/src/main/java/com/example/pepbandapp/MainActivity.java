@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Event currentlyDisplayedEvent;
     public int selectedMenuID;
 
+    public static boolean firstStart = true;
     public static MembersHandler memberDB;
     public static EventsHandler eventsDB;
 
