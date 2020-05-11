@@ -70,6 +70,7 @@ public class MembersHandler extends SQLiteOpenHelper {
     public void deleteMember(String memberName) {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_MEMBERS + " WHERE " + COLUMN_NAME + " ='" + memberName + "';");
+        db.close();
     }
 
     public String databaseToString(){
@@ -165,6 +166,7 @@ public class MembersHandler extends SQLiteOpenHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        db.endTransaction();
         db.close();
         return tempList;
     }
@@ -225,7 +227,7 @@ public class MembersHandler extends SQLiteOpenHelper {
             }
             recordSet.moveToNext();
         }
-
+        db.close();
         return members;
     }
 }

@@ -156,5 +156,12 @@ public class MembersFragment extends MainActivity {
         adapter = new MyRecyclerViewMemberAdapter(getApplicationContext(), memberList);
         //adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
+        for (Member member: memberList)
+        {
+            for (Event event: eventList)
+            {
+                event.AddMemberAttendance(member);
+            }
+        }
     }
 }

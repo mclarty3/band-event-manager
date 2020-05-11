@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if (eventList.size() == 0)
         {
+            eventsDB.getWritableDatabase();
             eventList = eventsDB.GetEventList(memberList);
             eventsDB.close();
         }

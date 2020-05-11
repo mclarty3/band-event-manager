@@ -55,6 +55,7 @@ public class EventsHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
         onCreate(db);
+        db.close();
     }
 
     //add a new row to the database
@@ -73,6 +74,7 @@ public class EventsHandler extends SQLiteOpenHelper {
     public void deleteEvent(String eventName) {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_EVENTS + "WHERE" + COLUMN_NAME + "=" + eventName + ";");
+        db.close();
     }
 
     public String databaseToString(){
@@ -171,6 +173,7 @@ public class EventsHandler extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
+        db.endTransaction();
         db.close();
         return events;
     }
@@ -198,6 +201,8 @@ public class EventsHandler extends SQLiteOpenHelper {
                 Date date = null;
                 try {
                     date = simpleDateFormat.parse(recordSet.getString(3));
+                    if (date == null)
+                        Log.d("DB", "DATE IS NULL");
                 } catch (java.text.ParseException e)
                 {
                     e.printStackTrace();
@@ -206,7 +211,7 @@ public class EventsHandler extends SQLiteOpenHelper {
             }
             recordSet.moveToNext();
         }
-
+        db.close();
         return events;
     }
 }

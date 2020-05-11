@@ -106,6 +106,10 @@ public class EventsFragment extends MainActivity {
                 e.printStackTrace();
             }
             Event event = new Event(name, info, location, date, memberList);
+            if (event.get_date() == null)
+            {
+                Log.d("test", "DATE IS NULL");
+            }
             dbHandler.addEvent(event);
             eventList.add(event);
             adapter = new MyRecyclerViewEventAdapter(this, eventList);
@@ -137,6 +141,12 @@ public class EventsFragment extends MainActivity {
     public void readInEvents(View view) {
         InputStream is = getResources().openRawResource(R.raw.events_data);
         eventList = dbHandler.readInData(is);
+        for (Event event: eventList)
+        {
+            for (Member member: memberList) {
+                event.AddMemberAttendance(member);
+            }
+        }
         dbHandler.close();
         adapter = new MyRecyclerViewEventAdapter(getApplicationContext(), eventList);
         //adapter.setClickListener(this);
