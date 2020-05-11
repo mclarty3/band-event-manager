@@ -7,11 +7,14 @@ import android.util.Log;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
 
 public class EventsFragment extends MainActivity {
 
+    MyRecyclerViewEventAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -20,6 +23,13 @@ public class EventsFragment extends MainActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final Context context = this;
+
+        // Set up event list
+        final RecyclerView recyclerView = findViewById(R.id.event_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MyRecyclerViewEventAdapter(context, eventList);
+        //adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
 
         drawer = findViewById(R.id.schedule_drawer);
         NavigationView navigationView = findViewById(R.id.nav_view);
