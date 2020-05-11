@@ -1,20 +1,14 @@
 # band-event-manager
-Here's what we have so far:
-Attendance screen will display users from MainActivity and (temporarily) keep their attendance/emailed data
 
-I spent a LONG time figuring out how to get persistent navigation drawer between activities, and it's not perfect, 
-but development on that front for other screens should move faster
+So this app is designed to be used by officers of the Pep Band (and Orchestra?)
 
-# Left to do
-We have to add an events screen and a members screen
+Three menus facilitate keeping track of events, members, and each event's attendance log 
 
-I rather like the scrolling RecyclerView I have set up for the attendance screen, and it's not too difficult to implement,
-but we can also stick with the simpler TextViews if it comes to that.
+There are two .csv files (located somewhere in the APK I guess? We used Android Studio) that can be edited,
+and the app can read from the .csv files in order to import event and member data.
 
-I need to improve activity flow (easy and intuitive swapping between screens, it's kinda fucky right now). 
-I also need to implement attendance data permanence when moving away from attendance screen. My goal is to always send
-info back to MainActivity, but we could also write straight to the DB from there (dependent on your expertise there)
+There is also an SQLite DB set up for member/event persistence when the app is closed (although in hindsight
+I don't think it actually saves attendance information. That would require additional columns since each event
+stores a list of all members and their attendance. TO-DO?)
 
-Read/write to .csv? 
-
-Sex things up a bit and we should be good to go :)
+Check it out, download it, use it all you want! ¯\\\_(ツ)\_/¯
