@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,8 +136,9 @@ public class MembersHandler extends SQLiteOpenHelper {
         return dbString;
     }
 
-    public void readIn(InputStream is) {
+    public ArrayList<Member> readIn(InputStream is) {
         SQLiteDatabase db = getWritableDatabase();
+        ArrayList<Member> tempList = new ArrayList<>();
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(is, Charset.forName("UTF-8")));
         String line = "";
@@ -148,6 +150,11 @@ public class MembersHandler extends SQLiteOpenHelper {
                     Log.d("CSVParser", "columns length = " + colums.length + "column[0] = " + colums[0] + " column[1] = " + colums[1] + " colum[2] = "+ colums[2] + " colum[3] = " + colums[3] + " colum[4] = " + colums[4]);
                     continue;
                 }
+                String name = colums[0];
+                String year = colums[1];
+                String instrument = colums[2];
+                String email = colums[3];
+                tempList.add(new Member(name, year, instrument, email));
                 ContentValues cv = new ContentValues(3);
                 cv.put(COLUMN_NAME, colums[0]);
                 cv.put(COLUMN_YEAR, colums[1]);
@@ -159,6 +166,7 @@ public class MembersHandler extends SQLiteOpenHelper {
             e.printStackTrace();
         }
         db.close();
+        return tempList;
     }
 
     public String groupByInstrument(){
