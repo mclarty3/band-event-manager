@@ -3,19 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="1"
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/wipe_attendance_data"
+        android:orderInCategory="2"
+        android:title="@string/wipe_attendance_data"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/wipe_member_data"
-        android:orderInCategory="200"
+        android:orderInCategory="3"
         android:title="@string/wipe_member_data"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/wipe_event_data"
-        android:orderInCategory="300"
+        android:orderInCategory="4"
         android:title="@string/wipe_event_data"
         app:showAsAction="never" />
 </menu>

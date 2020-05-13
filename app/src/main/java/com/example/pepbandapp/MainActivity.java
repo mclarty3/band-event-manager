@@ -154,12 +154,16 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.wipe_member_data)
         {
             DeleteDBDialog dialog = new DeleteDBDialog("member");
-            dialog.show(getSupportFragmentManager(), "test");
+            dialog.show(getSupportFragmentManager(), "wipe members");
             RefreshActivityDisplay();
         } else if (id == R.id.wipe_event_data)
         {
             DeleteDBDialog dialog = new DeleteDBDialog("event");
-            dialog.show(getSupportFragmentManager(), "test");
+            dialog.show(getSupportFragmentManager(), "wipe events");
+        } else if (id == R.id.wipe_attendance_data)
+        {
+            DeleteDBDialog dialog = new DeleteDBDialog("attendance");
+            dialog.show(getSupportFragmentManager(), "wipe attendance");
         }
 
         return true;

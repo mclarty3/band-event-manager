@@ -49,4 +49,5 @@
     <string name="pop_up_irreversible_text">This action is irreversible.</string>
     <string name="delete_text">Delete events</string>
     <string name="back_button">Back</string>
+    <string name="wipe_attendance_data">Erase attendance data</string>
 </resources>
