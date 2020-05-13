@@ -82,7 +82,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
 
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         Member member;
         TextView rowMemberName;
         CheckBox attendedCheckBox;
@@ -97,9 +97,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             rowMemberName = itemView.findViewById(R.id.attendance_member_name);
             attendedCheckBox = itemView.findViewById(R.id.attendedCheckBox);
             emailedCheckBox = itemView.findViewById(R.id.emailedCheckBox);
-            //attended = attendedCheckBox.isChecked();
-            //emailed = emailedCheckBox.isChecked();
-            itemView.setOnClickListener(this);
 
             attendedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -114,11 +111,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                     UpdateAttendedEmailed(thisHolder);
                 }
             });
-        }
-
-        @Override
-        public void onClick(View view) {
-            //if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 

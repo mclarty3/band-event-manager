@@ -24,7 +24,6 @@ public class Event implements Parcelable {
     private String _info;
     private String _location;
     private Date _date;
-    public HashMap<Member, Map.Entry<Boolean, Boolean>> eventAttendence;
     public List<MemberAttendanceRow> memberAttendance;
 
     public Event(String name, String info, String location, Date date, List<Member> memberList) {
@@ -32,24 +31,11 @@ public class Event implements Parcelable {
         this._info = info;
         this._location = location;
         this._date = date;
-        /*eventAttendence = new HashMap<>();
-        for (Member member: memberList)
-        {
-            eventAttendence.put(member, new AbstractMap.SimpleEntry<>(false, false));
-        }*/
         memberAttendance = new ArrayList<>();
         for (Member member: memberList)
         {
             memberAttendance.add(new MemberAttendanceRow(member, false, false));
         }
-    }
-
-    public Event(String name, String info, String location, Date date, HashMap<Member, Map.Entry<Boolean, Boolean>> attendance) {
-        this._name = name;
-        this._info = info;
-        this._location = location;
-        this._date = date;
-        this.eventAttendence = attendance;
     }
 
     public static Date StringToDate(String string)
@@ -105,13 +91,6 @@ public class Event implements Parcelable {
         this._date = _date;
     }
 
-    public Map.Entry<Boolean, Boolean> GetMemberAttendedEmailed(Member member)
-    {
-        if (eventAttendence != null)
-            return eventAttendence.get(member);
-        else
-            return null;
-    }
 
     public MemberAttendanceRow GetEventMemberAttendance(Member member)
     {
@@ -158,9 +137,9 @@ public class Event implements Parcelable {
         {
             _date = other._date;
         }
-        if (eventAttendence != null && !eventAttendence.equals(other.eventAttendence))
+        if (!memberAttendance.equals(other.memberAttendance))
         {
-            eventAttendence = other.eventAttendence;
+            memberAttendance = other.memberAttendance;
         }
     }
 
@@ -182,12 +161,6 @@ public class Event implements Parcelable {
         dest.writeLong(_date.getTime());
         if (memberAttendance != null) {
             dest.writeInt(memberAttendance.size());
-            /*for (HashMap.Entry<Member, Map.Entry<Boolean, Boolean>> entry : eventAttendence.entrySet()) {
-                //dest.writeParcelable(entry.getKey(), flags);
-                entry.getKey().writeToParcel(dest, flags);
-                dest.writeInt(entry.getValue().getKey() ? 1 : 0);   // Parcels attended
-                dest.writeInt(entry.getValue().getValue() ? 1 : 0); // Parcels emailed
-            }*/
             for (int i = 0; i < memberAttendance.size(); i++)
                 memberAttendance.get(i).writeToParcel(dest, flags);
         }
@@ -215,22 +188,11 @@ public class Event implements Parcelable {
         _date = new Date(in.readLong());
 
         int size = in.readInt();
-        /*eventAttendence = new HashMap<>();
-        Member mem = null;
-        for (int i = 0; i < size; i++)
-        {
-            Member member = Member.CREATOR.createFromParcel(in);
-            Boolean attended = in.readInt() == 1;
-            Boolean emailed = in.readInt() == 1;
-            eventAttendence.put(member, new AbstractMap.SimpleEntry<>(attended, emailed));
-            mem = i == 0 ? member: mem;
-        }*/
         memberAttendance = new ArrayList<>();
         for (int i = 0; i < size; i++)
         {
             memberAttendance.add(MemberAttendanceRow.CREATOR.createFromParcel(in));
         }
-        //_name = eventAttendence.get(mem).getValue().toString();
     }
 
     @Override
@@ -240,7 +202,6 @@ public class Event implements Parcelable {
                 ", _info='" + _info + '\'' +
                 ", _location='" + _location + '\'' +
                 ", _date=" + _date +
-                ", eventAttendence=" + eventAttendence +
                 ", memberAttendance=" + memberAttendance +
                 '}';
     }
