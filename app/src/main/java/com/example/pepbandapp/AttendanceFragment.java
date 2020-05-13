@@ -151,7 +151,6 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
         {
             if (eventList.get(i).get_name().equals(currentlyDisplayedEvent.get_name()))
             {
-                Log.d("event change", "updating event");
                 eventList.get(i).UpdateEvent(currentlyDisplayedEvent);
                 currentlyDisplayedEvent = eventList.get(i - 1);
                 break;

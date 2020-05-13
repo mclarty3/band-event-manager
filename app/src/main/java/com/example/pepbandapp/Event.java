@@ -131,21 +131,12 @@ public class Event implements Parcelable {
             return;
         for (MemberAttendanceRow attendance: memberAttendance)
         {
-            if (attendance.member.get_name().equals(member.get_name()))
+            if (attendance.member.get_email().equals(member.get_email()))
             {
                 attendance.attended = attended;
                 attendance.emailed = emailed;
                 return;
             }
-        }
-    }
-
-    public void SetMemberAttendedEmailed(Member member, Boolean attended, Boolean emailed)
-    {
-        if (eventAttendence != null)
-        {
-            eventAttendence.remove(member);
-            eventAttendence.put(member, new AbstractMap.SimpleEntry<>(attended, emailed));
         }
     }
 

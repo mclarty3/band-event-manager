@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.AbstractMap;
@@ -61,6 +62,18 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         holder.member = memberData.get(position);
     }
 
+    @Override
+    public void onViewRecycled(@NonNull ViewHolder holder) {
+        if (holder.emailedCheckBox != null) {
+            holder.emailedCheckBox.setOnCheckedChangeListener(null);
+        }
+        if (holder.attendedCheckBox != null)
+        {
+            holder.attendedCheckBox.setOnCheckedChangeListener(null);
+        }
+        super.onViewRecycled(holder);
+    }
+
     // total number of rows
     @Override
     public int getItemCount() {
@@ -75,8 +88,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         CheckBox attendedCheckBox;
         CheckBox emailedCheckBox;
 
-        Boolean attended;
-        Boolean emailed;
+        boolean attended;
+        boolean emailed;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -84,14 +97,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             rowMemberName = itemView.findViewById(R.id.attendance_member_name);
             attendedCheckBox = itemView.findViewById(R.id.attendedCheckBox);
             emailedCheckBox = itemView.findViewById(R.id.emailedCheckBox);
-            attended = attendedCheckBox.isChecked();
-            emailed = emailedCheckBox.isChecked();
+            //attended = attendedCheckBox.isChecked();
+            //emailed = emailedCheckBox.isChecked();
             itemView.setOnClickListener(this);
 
             attendedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Log.d("good", "updating checks");
                     UpdateAttendedEmailed(thisHolder);
                 }
             });
@@ -99,7 +111,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             emailedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Log.d("good", "updating checks");
                     UpdateAttendedEmailed(thisHolder);
                 }
             });
@@ -113,7 +124,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     public void UpdateAttendedEmailed(ViewHolder listItem)
     {
-        Log.d("tag", "Updating checkbox");
         listItem.attended = listItem.attendedCheckBox.isChecked();
         listItem.emailed = listItem.emailedCheckBox.isChecked();
         /*Map.Entry<Boolean, Boolean> entry = eventData.GetMemberAttendedEmailed(listItem.member);
@@ -127,8 +137,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     }
 
     // convenience method for getting data at click position
-    String getItem(int id) {
-        return nameData.get(id);
+    Member getItem(int id) {
+        return memberData.get(id);
     }
 
     // allows clicks events to be caught
