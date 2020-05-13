@@ -151,5 +151,6 @@ public class EventsFragment extends MainActivity {
         adapter = new MyRecyclerViewEventAdapter(getApplicationContext(), eventList);
         //adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
+        currentlyDisplayedEvent = eventList.get(0);
     }
 }

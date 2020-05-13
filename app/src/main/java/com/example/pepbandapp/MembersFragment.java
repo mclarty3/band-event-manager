@@ -154,14 +154,14 @@ public class MembersFragment extends MainActivity {
         memberList = dbHandler.readIn(is);
         dbHandler.close();
         adapter = new MyRecyclerViewMemberAdapter(getApplicationContext(), memberList);
-        //adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
-        for (Member member: memberList)
+        for (Event event: eventList)
         {
-            for (Event event: eventList)
-            {
+            for (Member member: memberList) {
                 event.AddMemberAttendance(member);
             }
         }
+        if (eventList.size() > 0)
+            currentlyDisplayedEvent = eventList.get(0);
     }
 }

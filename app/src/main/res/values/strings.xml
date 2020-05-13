@@ -43,4 +43,10 @@
     <string name="group_by_year">Group By Year</string>
     <string name="group_by_instrument">Group By Instrument</string>
     <string name="attendance_member_name">member name</string>
+    <string name="wipe_member_data">Erase member data</string>
+    <string name="wipe_event_data">Erase event data</string>
+    <string name="pop_up_text">Are you sure you want to delete all events from the database?</string>
+    <string name="pop_up_irreversible_text">This action is irreversible.</string>
+    <string name="delete_text">Delete events</string>
+    <string name="back_button">Back</string>
 </resources>

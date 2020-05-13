@@ -148,6 +148,15 @@ public class Event implements Parcelable {
         memberAttendance.add(new MemberAttendanceRow(member, false, false));
     }
 
+    public void EraseMemberAttendance()
+    {
+        for (MemberAttendanceRow attendance: memberAttendance)
+        {
+            attendance.attended = false;
+            attendance.emailed = false;
+        }
+    }
+
     @Override
     public int describeContents() {
         return 0;

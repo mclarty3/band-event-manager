@@ -1,8 +1,6 @@
 package com.example.pepbandapp;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
+public class MyRecyclerViewAttendanceAdapter extends RecyclerView.Adapter<MyRecyclerViewAttendanceAdapter.ViewHolder> {
 
     public List<Member> memberData;
     public List<String> nameData;
@@ -28,8 +25,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    MyRecyclerViewAdapter(Context context, List<Member> members, Event event) {
+    MyRecyclerViewAttendanceAdapter(Context context, List<Member> members, Event event) {
         this.mInflater = LayoutInflater.from(context);
+        if (event == null)
+        {
+            memberData = new ArrayList<>();
+            eventData = null;
+            return;
+        }
         memberData = members;
         eventData = event;
     }
@@ -50,16 +53,18 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String name = memberData.get(position).get_name();
-        Boolean attended, emailed;
-        attended = eventData.memberAttendance.get(position).attended;
-        emailed = eventData.memberAttendance.get(position).emailed;
-        holder.rowMemberName.setText(name);
-        holder.attended = attended;
-        holder.attendedCheckBox.setChecked(attended);
-        holder.emailed = emailed;
-        holder.emailedCheckBox.setChecked(emailed);
-        holder.member = memberData.get(position);
+        if (eventData != null && eventData.memberAttendance.size() > 0) {
+            String name = memberData.get(position).get_name();
+            Boolean attended, emailed;
+            attended = eventData.memberAttendance.get(position).attended;
+            emailed = eventData.memberAttendance.get(position).emailed;
+            holder.rowMemberName.setText(name);
+            holder.attended = attended;
+            holder.attendedCheckBox.setChecked(attended);
+            holder.emailed = emailed;
+            holder.emailedCheckBox.setChecked(emailed);
+            holder.member = memberData.get(position);
+        }
     }
 
     @Override

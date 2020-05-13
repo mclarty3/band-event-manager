@@ -14,7 +14,9 @@ import com.google.android.material.navigation.NavigationView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -28,13 +30,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, DeleteDBDialog.DeleteDBDialogListener {
 
     private AppBarConfiguration mAppBarConfiguration;
 
-    public ArrayList<Event> eventList = new ArrayList<>();
-    public ArrayList<Member> memberList = new ArrayList<>();
-    public Event currentlyDisplayedEvent;
+    static public ArrayList<Event> eventList = new ArrayList<>();
+    static public ArrayList<Member> memberList = new ArrayList<>();
+    static public Event currentlyDisplayedEvent = null;
     public int selectedMenuID;
 
     public static boolean firstStart = true;
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static EventsHandler eventsDB;
 
     DrawerLayout drawer;
+    DrawerLayout settings;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            }
 //        });
         drawer = findViewById(R.id.drawer_layout);
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -96,30 +101,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             eventsDB.close();
         }
 
-        /*memberList.add(new Member("Ryan McLarty", "2021", "Trumpet", "testR"));
-        memberList.add(new Member("Chiara Giammatteo", "2021", "Trumpet", "testC"));
-        memberList.add(new Member("David Andreas", "2022", "Percussion", "testD"));
-        memberList.add(new Member("Julia Baum", "2020", "Tenor Sax", "testJ"));
-
-        memberList.add(new Member("Julia Baum2", "2020", "Tenor Sax", "testJ"));
-
-        memberList.add(new Member("Julia Baum3", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum4", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum5", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum6", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum7", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum8", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum9", "2020", "Tenor Sax", "testJ"));
-        memberList.add(new Member("Julia Baum0", "2020", "Tenor Sax", "testJ"));*/
-
         Calendar cal = Calendar.getInstance(); // This is now the only way to do M/D/Y in Java!
         cal.set(2020, 1, 1);
-        eventList.add(new Event("Test", "Test", "Test", cal.getTime(), memberList));
+        //eventList.add(new Event("Test", "Test", "Test", cal.getTime(), memberList));
         cal.set(2020, 0, 23);
-        eventList.add(new Event("Test2", "Test2", "Test2", cal.getTime(), memberList));
-        SortEventDates();
 
-        //memberList.get(0).set_name(String.valueOf(eventList.get(0).eventAttendence.get(memberList.get(0))));
+        if (eventList.size() != 0)
+        {
+            SortEventDates();
+            currentlyDisplayedEvent = eventList.get(0);
+        }
     }
 
     @Override
@@ -134,6 +125,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void RefreshActivityDisplay()
+    {
+
     }
 
     private void SortEventDates()
@@ -151,6 +147,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public boolean onOptionsItemSelected(MenuItem menuItem)
+    {
+        int id = menuItem.getItemId();
+
+        if (id == R.id.wipe_member_data)
+        {
+            DeleteDBDialog dialog = new DeleteDBDialog("member");
+            dialog.show(getSupportFragmentManager(), "test");
+            RefreshActivityDisplay();
+        } else if (id == R.id.wipe_event_data)
+        {
+            DeleteDBDialog dialog = new DeleteDBDialog("event");
+            dialog.show(getSupportFragmentManager(), "test");
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog)
+    {
+        RefreshActivityDisplay();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog)
+    {
+
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id = menuItem.getItemId();
@@ -159,6 +185,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         {
             drawer.closeDrawer(GravityCompat.START);
             return false;
+        }
+
+        if (id == R.id.action_settings)
+        {
+            Log.d("test", "settings pressed");
+            return true;
         }
 
         Intent intent = null;
@@ -175,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             intent = new Intent(getApplicationContext(), MembersFragment.class);
         }
         if (intent != null) {
-            intent.putExtra("currentlyDisplayedEvent", eventList.get(0));
+            intent.putExtra("currentlyDisplayedEvent", currentlyDisplayedEvent);
             intent.putParcelableArrayListExtra("eventList", eventList);
             intent.putParcelableArrayListExtra("memberList", memberList);
             intent.putExtra("SELECTED_DRAWER_ITEM", menuItem.getItemId());

@@ -1,38 +1,27 @@
 package com.example.pepbandapp;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class AttendanceFragment extends MainActivity implements MyRecyclerViewAdapter.ItemClickListener{
+public class AttendanceFragment extends MainActivity implements MyRecyclerViewAttendanceAdapter.ItemClickListener{
     TextView attendanceNameTextView, attendanceDateTextView;
     ImageButton previousEventButton, nextEventButton;
     EditText eventNameEditText, eventDateEditText;
@@ -41,7 +30,9 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
     //ArrayList<Member> memberList = new ArrayList<>();
     Intent i;
 
-    MyRecyclerViewAdapter adapter;
+    MyRecyclerViewAttendanceAdapter adapter;
+    RecyclerView recyclerView;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -49,7 +40,7 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
         setContentView(R.layout.fragment_attendance);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final Context context = this;
+        context = this;
 
         attendanceNameTextView = (TextView) findViewById(R.id.att_name_textview);
         attendanceDateTextView = (TextView) findViewById(R.id.att_date_textview);
@@ -62,7 +53,14 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
         i = getIntent();
         GetIntentExtras(i);
 
-        SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
+        if (currentlyDisplayedEvent == null)
+        {
+            SetEventStrings(null, null);
+        }
+        else {
+            SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
+        }
+
         for (int event = 0; event < eventList.size(); event++)
         {
             if (eventList.get(event) == currentlyDisplayedEvent)
@@ -73,9 +71,9 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
         }
 
         // Set up attendance list
-        final RecyclerView recyclerView = findViewById(R.id.attendance_list);
+        recyclerView = findViewById(R.id.attendance_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyRecyclerViewAdapter(context, memberList, currentlyDisplayedEvent);
+        adapter = new MyRecyclerViewAttendanceAdapter(context, memberList, currentlyDisplayedEvent);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
@@ -100,7 +98,7 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
             {
                 if (previousEvent()) {
                     SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
-                    recyclerView.setAdapter(new MyRecyclerViewAdapter(context, memberList, currentlyDisplayedEvent));
+                    recyclerView.setAdapter(new MyRecyclerViewAttendanceAdapter(context, memberList, currentlyDisplayedEvent));
                 }
             }
         });
@@ -111,7 +109,7 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
             {
                 if (nextEvent()) {
                     SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
-                    recyclerView.setAdapter(new MyRecyclerViewAdapter(context, memberList, currentlyDisplayedEvent));
+                    recyclerView.setAdapter(new MyRecyclerViewAttendanceAdapter(context, memberList, currentlyDisplayedEvent));
                 }
             }
         });
@@ -119,7 +117,20 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
         adapter.setClickListener(this);
     }
 
-
+    @Override
+    public void RefreshActivityDisplay()
+    {
+        if (currentlyDisplayedEvent == null)
+        {
+            SetEventStrings(null, null);
+        }
+        else {
+            SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
+        }
+        adapter = new MyRecyclerViewAttendanceAdapter(context, memberList, currentlyDisplayedEvent);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
+    }
 
     public void searchButtonClicked(View view) {
         String searchName = eventNameEditText.getText().toString();
@@ -134,6 +145,12 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
 
     public void SetEventStrings(String name, Date date)
     {
+        if (name == null || date == null)
+        {
+            attendanceNameTextView.setText("No events");
+            attendanceDateTextView.setText("");
+            return;
+        }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/YYYY", Locale.US);
         String eventDateString = simpleDateFormat.format(date);
         attendanceDateTextView.setText(eventDateString);
@@ -143,6 +160,10 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
 
     public Boolean previousEvent()
     {
+        if (eventList.size() == 0)
+        {
+            return false;
+        }
         if (eventList.get(0).get_name().equals(currentlyDisplayedEvent.get_name()))
         {
             return false;
@@ -161,6 +182,10 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
 
     public Boolean nextEvent()
     {
+        if (eventList.size() == 0)
+        {
+            return false;
+        }
         if (eventList.get(eventList.size() - 1).get_name().equals(currentlyDisplayedEvent.get_name()))
         {
             return false;
@@ -169,7 +194,6 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAd
         {
             if (eventList.get(i).get_name().equals(currentlyDisplayedEvent.get_name()))
             {
-                Log.d("event change", "updating event");
                 eventList.get(i).UpdateEvent(currentlyDisplayedEvent);
                 currentlyDisplayedEvent = eventList.get(i + 1);
                 break;
