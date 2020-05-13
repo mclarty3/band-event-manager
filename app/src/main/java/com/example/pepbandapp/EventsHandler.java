@@ -20,12 +20,11 @@ import java.util.Date;
 public class EventsHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "eventDB.db";
-    public static final String TABLE_EVENTS = "Events";
-    //public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_NAME = "Name";
-    public static final String COLUMN_INFO = "Info";
-    public static final String COLUMN_LOCATION = "Location";
-    public static final String COLUMN_DATE = "Date";
+    private static final String TABLE_EVENTS = "Events";
+    private static final String COLUMN_NAME = "Name";
+    private static final String COLUMN_INFO = "Info";
+    private static final String COLUMN_LOCATION = "Location";
+    private static final String COLUMN_DATE = "Date";
 
     //pass database info to superclass
     public EventsHandler(Context context) {
@@ -91,10 +90,8 @@ public class EventsHandler extends SQLiteOpenHelper {
         while (!recordSet.isAfterLast()) {
             // null could happen if we used our empty constructor
             if (recordSet.getString(recordSet.getColumnIndex("Name")) != null) {
-                // dbString += recordSet.getString(recordSet.getColumnIndex("Dish"));
                 dbString += recordSet.getString(0);
                 dbString += ",   ";
-                //dbString += recordSet.getString(recordSet.getColumnIndex("Price"));
                 dbString += recordSet.getString(1);
                 dbString += ",   ";
                 dbString += recordSet.getString(2);
@@ -104,7 +101,6 @@ public class EventsHandler extends SQLiteOpenHelper {
             }
             recordSet.moveToNext();
         }
-        //dbString += "\n";
 
         db.close();
         return dbString;
@@ -125,7 +121,6 @@ public class EventsHandler extends SQLiteOpenHelper {
         while (!recordSet.isAfterLast()) {
             // null could happen if we used our empty constructor
             if (recordSet.getString(recordSet.getColumnIndex("Name")) != null) {
-                // dbString += recordSet.getString(recordSet.getColumnIndex("dish"));
                 dbString += recordSet.getString(0);
                 dbString += " ";
                 dbString += recordSet.getString(1);
@@ -143,7 +138,6 @@ public class EventsHandler extends SQLiteOpenHelper {
                 new InputStreamReader(is, Charset.forName("UTF-8")));
         String line = "";
         ArrayList<Event> events = new ArrayList<>();
-        db.beginTransaction();
         try {
             while ((line = reader.readLine()) != null) {
                 String[] colums = line.split(",");
@@ -162,6 +156,8 @@ public class EventsHandler extends SQLiteOpenHelper {
                 events.add(event);
                 Log.d("test", (event.get_date() == null ? "null":"not null"));
 
+
+
                 ContentValues cv = new ContentValues(3);
                 cv.put(COLUMN_NAME, colums[0]);
                 cv.put(COLUMN_INFO, colums[1]);
@@ -172,8 +168,6 @@ public class EventsHandler extends SQLiteOpenHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        db.endTransaction();
         db.close();
         return events;
     }

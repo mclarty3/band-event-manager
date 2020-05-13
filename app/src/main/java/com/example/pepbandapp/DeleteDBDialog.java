@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
@@ -13,8 +12,8 @@ import java.util.ArrayList;
 
 public class DeleteDBDialog extends DialogFragment {
 
-    DeleteDBDialogListener listener;
-    String dataType; // Should be 'event' or 'member'
+    private DeleteDBDialogListener listener;
+    private String dataType; // Should be 'event' or 'member'
 
     interface DeleteDBDialogListener {
         public void onDialogPositiveClick(DialogFragment dialog);

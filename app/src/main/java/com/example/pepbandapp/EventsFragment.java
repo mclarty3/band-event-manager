@@ -15,16 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.EmptyStackException;
 
 public class EventsFragment extends MainActivity {
 
@@ -73,22 +67,25 @@ public class EventsFragment extends MainActivity {
         recyclerView = findViewById(R.id.event_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MyRecyclerViewEventAdapter(context, eventList);
-        //adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
         dbHandler = MainActivity.eventsDB;
     }
 
+    @Override
+    public void RefreshActivityDisplay()
+    {
+        adapter = new MyRecyclerViewEventAdapter(getApplicationContext(), eventList);
+        recyclerView.setAdapter(adapter);
+    }
+
     //Print the database
     public void printDatabase(){
         String dbString = dbHandler.databaseToString();
-        //scheduleTextView.setText(dbString); event list??
     }
 
-    //add your elements onclick methods.
-    //Add a product to the database
+    //Add an event to the database
     public void addButtonClicked(View view){
-        // dbHandler.add needs an object parameter.
         if (eventDateEditText.getText().toString().length() == 10 &&
             eventDateEditText.getText().toString().charAt(2) == '/' &&
             eventDateEditText.getText().toString().charAt(5) == '/')
@@ -128,15 +125,12 @@ public class EventsFragment extends MainActivity {
         printDatabase();
     }
 
-    //Delete items
+    //Delete event
     public void deleteButtonClicked(View view){
-        // dbHandler delete needs string to find in the db
         String inputText = eventNameEditText.getText().toString();
         dbHandler.deleteEvent(inputText);
         printDatabase();
     }
-
-    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
     public void readInEvents(View view) {
         InputStream is = getResources().openRawResource(R.raw.events_data);
@@ -149,7 +143,6 @@ public class EventsFragment extends MainActivity {
         }
         dbHandler.close();
         adapter = new MyRecyclerViewEventAdapter(getApplicationContext(), eventList);
-        //adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
         currentlyDisplayedEvent = eventList.get(0);
     }

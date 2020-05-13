@@ -43,7 +43,6 @@ public class MembersFragment extends MainActivity {
         recyclerView = findViewById(R.id.member_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MyRecyclerViewMemberAdapter(context, memberList);
-        //adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
         drawer = findViewById(R.id.members_drawer);
@@ -54,17 +53,14 @@ public class MembersFragment extends MainActivity {
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        studentNameTextView = (TextView) findViewById(R.id.studentname_textview);
-        yearTextView = (TextView) findViewById(R.id.year_textview);
-        instrumentTextView = (TextView) findViewById(R.id.instrument_textview);
-        emailTextView = (TextView) findViewById(R.id.email_textview);
-        memberNameEditText = (EditText) findViewById(R.id.membername_edittext);
-        memberYearEditText = (EditText) findViewById(R.id.memberyear_edittext);
-        memberInstrumentEditText = (EditText) findViewById(R.id.memberinstrument_edittext);
-        memberEmailEditText = (EditText) findViewById(R.id.memberemail_edittext);
-        /* Can pass nulls because of the constants in the helper.
-         * the 1 means version 1 so don't run update.
-         */
+        studentNameTextView = findViewById(R.id.studentname_textview);
+        yearTextView = findViewById(R.id.year_textview);
+        instrumentTextView = findViewById(R.id.instrument_textview);
+        emailTextView = findViewById(R.id.email_textview);
+        memberNameEditText = findViewById(R.id.membername_edittext);
+        memberYearEditText = findViewById(R.id.memberyear_edittext);
+        memberInstrumentEditText = findViewById(R.id.memberinstrument_edittext);
+        memberEmailEditText = findViewById(R.id.memberemail_edittext);
 
         Intent i = getIntent();
         GetIntentExtras(i);
@@ -74,23 +70,21 @@ public class MembersFragment extends MainActivity {
             navigationView.getMenu().findItem(selectedMenuID).setChecked(true);
         }
 
-        //dbHandler = new MembersHandler(this);
         dbHandler = MainActivity.memberDB;
-        //printDatabase();
     }
 
-    //Print the database
-    public void printDatabase(){
-        //String dbString = dbHandler.databaseToString();
-        //membersTextView.setText(memberList.get(0).get_name());
+    @Override
+    public void RefreshActivityDisplay()
+    {
+        adapter = new MyRecyclerViewMemberAdapter(getApplicationContext(), memberList);
+        recyclerView.setAdapter(adapter);
     }
 
-    //add your elements onclick methods.
-    //Add a product to the database
+    //Add a member to the database
     public void addMemberButtonClicked(View view){
-        // dbHandler.add needs an object parameter.
-        Member member =
-                new Member(memberNameEditText.getText().toString(), memberYearEditText.getText().toString(), memberInstrumentEditText.getText().toString(), memberEmailEditText.getText().toString());
+        Member member = new Member(memberNameEditText.getText().toString(),
+                memberYearEditText.getText().toString(), memberInstrumentEditText.getText().toString(),
+                memberEmailEditText.getText().toString());
         dbHandler.addMember(member);
         memberList.add(member);
         for (Event event: eventList)
@@ -103,10 +97,8 @@ public class MembersFragment extends MainActivity {
 
     //Delete items
     public void deleteMemberButtonClicked(View view){
-        // dbHandler delete needs string to find in the db
         String inputText = memberNameEditText.getText().toString();
         dbHandler.deleteMember(inputText);
-        printDatabase();
     }
 
     public void groupByYear(View view) {
@@ -118,36 +110,6 @@ public class MembersFragment extends MainActivity {
         String resultsString = dbHandler.groupByInstrument();
         membersTextView.setText(resultsString);
     }
-
-//    public void readInMembers(View view) {
-//        InputStream is = getResources().openRawResource(R.raw.members_data);
-//        BufferedReader reader = new BufferedReader(
-//                new InputStreamReader(is, Charset.forName("UTF-8"))
-//        );
-//
-//        String line = "";
-//        while (true) {
-//            try {
-//                //split by ","
-//                String[] tokens = line.split(",");
-//
-//                //read the data
-//                Member member = new Member();
-//                member.set_name(tokens[0]);
-//                member.set_year(tokens[1]);
-//                member.set_instrument(tokens[2]);
-//                member.set_email(tokens[3]);
-//                dbHandler.addMember(member);
-//
-//                Log.d("ScheduleActivity", "Just created: " + member);
-//
-//                if (!((line = reader.readLine()) != null)) break;
-//            } catch (IOException e) {
-//                Log.wtf("ScheduleActivity", "Error reading data file on line " + line, e);
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
     public void readInMembers(View view) {
         InputStream is = getResources().openRawResource(R.raw.members_data);

@@ -17,12 +17,9 @@ import java.util.List;
 public class MyRecyclerViewAttendanceAdapter extends RecyclerView.Adapter<MyRecyclerViewAttendanceAdapter.ViewHolder> {
 
     public List<Member> memberData;
-    public List<String> nameData;
-    private List<Boolean> attendedData;
-    private List<Boolean> emailedData;
     public Event eventData;
     private LayoutInflater mInflater;
-    private ItemClickListener mClickListener;
+    //private ItemClickListener mClickListener;
 
     // data is passed into the constructor
     MyRecyclerViewAttendanceAdapter(Context context, List<Member> members, Event event) {
@@ -43,12 +40,6 @@ public class MyRecyclerViewAttendanceAdapter extends RecyclerView.Adapter<MyRecy
         View view = mInflater.inflate(R.layout.recyclerview_attendance_row, parent, false);
         return new ViewHolder(view);
     }
-
-    /*@NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
-    }*/
 
     // binds the data to the TextView in each row
     @Override
@@ -123,22 +114,10 @@ public class MyRecyclerViewAttendanceAdapter extends RecyclerView.Adapter<MyRecy
     {
         listItem.attended = listItem.attendedCheckBox.isChecked();
         listItem.emailed = listItem.emailedCheckBox.isChecked();
-        /*Map.Entry<Boolean, Boolean> entry = eventData.GetMemberAttendedEmailed(listItem.member);
-        if (entry != null)
-        {
-            eventData.SetMemberAttendedEmailed(listItem.member, listItem.attended, listItem.emailed);
-        }*/
         eventData.SetEventMemberAttendance(listItem.member, listItem.attended, listItem.emailed);
-        //if (mClickListener != null) mClickListener.onItemClick();
-        //else Log.d("listener", "is null");
     }
 
-    // convenience method for getting data at click position
-    Member getItem(int id) {
-        return memberData.get(id);
-    }
-
-    // allows clicks events to be caught
+    /*// allows clicks events to be caught
     public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
@@ -146,5 +125,5 @@ public class MyRecyclerViewAttendanceAdapter extends RecyclerView.Adapter<MyRecy
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick();
-    }
+    }*/
 }

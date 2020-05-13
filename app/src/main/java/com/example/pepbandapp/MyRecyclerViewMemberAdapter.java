@@ -28,12 +28,6 @@ public class MyRecyclerViewMemberAdapter extends RecyclerView.Adapter<MyRecycler
         return new MyRecyclerViewMemberAdapter.ViewHolder(view);
     }
 
-/*@NonNull
-@Override
-public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    return null;
-}*/
-
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {

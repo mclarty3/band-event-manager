@@ -8,15 +8,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.jar.Attributes;
 
 public class MembersHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
@@ -87,7 +83,6 @@ public class MembersHandler extends SQLiteOpenHelper {
         while (!recordSet.isAfterLast()) {
             // null could happen if we used our empty constructor
             if (recordSet.getString(recordSet.getColumnIndex("Name")) != null) {
-                // dbString += recordSet.getString(recordSet.getColumnIndex("Dish"));
                 dbString += recordSet.getString(0);
                 dbString += ",   ";
                 //dbString += recordSet.getString(recordSet.getColumnIndex("Price"));
@@ -100,7 +95,6 @@ public class MembersHandler extends SQLiteOpenHelper {
             }
             recordSet.moveToNext();
         }
-        //dbString += "\n";
 
         db.close();
         return dbString;
@@ -121,7 +115,6 @@ public class MembersHandler extends SQLiteOpenHelper {
         while (!recordSet.isAfterLast()) {
             // null could happen if we used our empty constructor
             if (recordSet.getString(recordSet.getColumnIndex("Name")) != null) {
-                // dbString += recordSet.getString(recordSet.getColumnIndex("dish"));
                 dbString += recordSet.getString(recordSet.getColumnIndex("Year"));
                 dbString += ",   ";
                 dbString += recordSet.getString(recordSet.getColumnIndex("Name"));
@@ -143,7 +136,6 @@ public class MembersHandler extends SQLiteOpenHelper {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(is, Charset.forName("UTF-8")));
         String line = "";
-        db.beginTransaction();
         try {
             while ((line = reader.readLine()) != null) {
                 String[] colums = line.split(",");
@@ -166,7 +158,6 @@ public class MembersHandler extends SQLiteOpenHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        db.endTransaction();
         db.close();
         return tempList;
     }
@@ -186,7 +177,6 @@ public class MembersHandler extends SQLiteOpenHelper {
         while (!recordSet.isAfterLast()) {
             // null could happen if we used our empty constructor
             if (recordSet.getString(recordSet.getColumnIndex("Name")) != null) {
-                // dbString += recordSet.getString(recordSet.getColumnIndex("dish"));
                 dbString += recordSet.getString(recordSet.getColumnIndex("Instrument"));
                 dbString += ",   ";
                 dbString += recordSet.getString(recordSet.getColumnIndex("Name"));
@@ -205,7 +195,6 @@ public class MembersHandler extends SQLiteOpenHelper {
     public ArrayList<Member> GetMemberList()
     {
         ArrayList<Member> members = new ArrayList<>();
-        String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_MEMBERS + " WHERE 1";
 

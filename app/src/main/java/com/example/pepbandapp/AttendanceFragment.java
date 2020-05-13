@@ -26,10 +26,7 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAt
     ImageButton previousEventButton, nextEventButton;
     EditText eventNameEditText, eventDateEditText;
     EventsHandler dbHandler;
-    //ArrayList<Event> eventList = new ArrayList<>();
-    //ArrayList<Member> memberList = new ArrayList<>();
     Intent i;
-
     MyRecyclerViewAttendanceAdapter adapter;
     RecyclerView recyclerView;
     Context context;
@@ -42,12 +39,12 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAt
         setSupportActionBar(toolbar);
         context = this;
 
-        attendanceNameTextView = (TextView) findViewById(R.id.att_name_textview);
-        attendanceDateTextView = (TextView) findViewById(R.id.att_date_textview);
+        attendanceNameTextView = findViewById(R.id.att_name_textview);
+        attendanceDateTextView = findViewById(R.id.att_date_textview);
         previousEventButton = findViewById(R.id.back_button);
         nextEventButton = findViewById(R.id.forward_button);
-        eventNameEditText = (EditText) findViewById(R.id.event_name_edittext);
-        eventDateEditText = (EditText) findViewById(R.id.event_date_edittext);
+        eventNameEditText = findViewById(R.id.event_name_edittext);
+        eventDateEditText = findViewById(R.id.event_date_edittext);
         dbHandler = new EventsHandler(this);
 
         i = getIntent();
@@ -89,8 +86,6 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAt
         {
             navigationView.getMenu().findItem(selectedMenuID).setChecked(true);
         }
-
-
 
         previousEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
