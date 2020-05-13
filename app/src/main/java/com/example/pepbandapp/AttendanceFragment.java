@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class AttendanceFragment extends MainActivity implements MyRecyclerViewAttendanceAdapter.ItemClickListener{
+public class AttendanceFragment extends MainActivity {
     TextView attendanceNameTextView, attendanceDateTextView;
     ImageButton previousEventButton, nextEventButton;
     EditText eventNameEditText, eventDateEditText;
@@ -71,7 +71,6 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAt
         recyclerView = findViewById(R.id.attendance_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MyRecyclerViewAttendanceAdapter(context, memberList, currentlyDisplayedEvent);
-        adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
         drawer = findViewById(R.id.included_toolbar);
@@ -108,8 +107,6 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAt
                 }
             }
         });
-
-        adapter.setClickListener(this);
     }
 
     @Override
@@ -123,7 +120,6 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAt
             SetEventStrings(currentlyDisplayedEvent.get_name(), currentlyDisplayedEvent.get_date());
         }
         adapter = new MyRecyclerViewAttendanceAdapter(context, memberList, currentlyDisplayedEvent);
-        adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -195,11 +191,5 @@ public class AttendanceFragment extends MainActivity implements MyRecyclerViewAt
             }
         }
         return true;
-    }
-
-    @Override
-    public void onItemClick() {
-        i.putParcelableArrayListExtra("savedEventList", eventList);
-        Log.d("Tag", "Pushing attendance");
     }
 }
